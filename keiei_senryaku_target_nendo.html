@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#efeee8">
+<title>令和8年度はどの年度を狙うか</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@400;700;900&display=swap">
+<style>
+:root{
+  --paper:#efeee8;
+  --surface:#fbfaf6;
+  --raised:#ffffff;
+  --ink:#1b1f1c;
+  --ink-2:#3d443e;
+  --muted:#6e766d;
+  --rule:#d5d4ca;
+  --rule-soft:#e4e3da;
+  --ai:#1f4e6d;
+  --ai-wash:rgba(31,78,109,.09);
+  --shu:#b8412a;
+  --shu-wash:rgba(184,65,42,.10);
+  --kin:#9d7018;
+  --nezu:#a3a99f;
+  --shadow:0 1px 3px rgba(27,31,28,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#15181a; --surface:#1c2022; --raised:#232829;
+    --ink:#e9ebe6; --ink-2:#c2c8c1; --muted:#8d968c;
+    --rule:#333a3b; --rule-soft:#282e30;
+    --ai:#7fb6d8; --ai-wash:rgba(127,182,216,.12);
+    --shu:#e0755a; --shu-wash:rgba(224,117,90,.13);
+    --kin:#d3a441; --nezu:#7b837a;
+    --shadow:0 1px 3px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#15181a; --surface:#1c2022; --raised:#232829;
+  --ink:#e9ebe6; --ink-2:#c2c8c1; --muted:#8d968c;
+  --rule:#333a3b; --rule-soft:#282e30;
+  --ai:#7fb6d8; --ai-wash:rgba(127,182,216,.12);
+  --shu:#e0755a; --shu-wash:rgba(224,117,90,.13);
+  --kin:#d3a441; --nezu:#7b837a;
+  --shadow:0 1px 3px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",system-ui,sans-serif;
+  font-size:16px; line-height:1.9; -webkit-font-smoothing:antialiased;
+}
+.page{max-width:820px;margin:0 auto;padding:56px 26px 96px;}
+h1,h2,h3{font-family:"Zen Old Mincho",serif;text-wrap:balance;margin:0;}
+
+.mast{border-bottom:2px solid var(--ink);padding-bottom:22px;}
+.kicker{font-size:.7rem;letter-spacing:.22em;color:var(--muted);font-weight:500;margin-bottom:14px;}
+h1{font-size:2.15rem;font-weight:900;line-height:1.4;letter-spacing:.01em;}
+.standfirst{margin-top:16px;font-size:1rem;color:var(--ink-2);line-height:2;max-width:62ch;}
+.meta{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px 22px;font-size:.74rem;color:var(--muted);letter-spacing:.04em;}
+.meta b{color:var(--ink-2);font-weight:500;}
+
+section{margin-top:60px;}
+h2{font-size:1.32rem;font-weight:700;line-height:1.6;padding-bottom:12px;border-bottom:1px solid var(--rule);}
+h3{font-size:1.02rem;font-weight:700;margin-top:34px;}
+p{margin:16px 0;max-width:64ch;}
+strong{font-weight:700;}
+.em-ai{color:var(--ai);font-weight:700;}
+.em-shu{color:var(--shu);font-weight:700;}
+
+/* 結論カード */
+.verdict{
+  margin-top:26px;background:var(--raised);border:1px solid var(--rule-soft);
+  border-left:3px solid var(--shu);border-radius:3px;padding:22px 24px;box-shadow:var(--shadow);
+}
+.verdict .tag{font-size:.68rem;letter-spacing:.16em;font-weight:700;color:var(--shu);display:block;margin-bottom:10px;}
+.verdict .yrs{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 14px;}
+.yr{
+  font-family:"Zen Old Mincho",serif;font-weight:700;
+  border-radius:3px;padding:9px 16px;line-height:1.4;font-size:1.02rem;
+}
+.yr.p1{background:var(--shu);color:var(--paper);}
+.yr.p2{background:var(--ai);color:var(--paper);}
+.yr.p3{background:none;border:1px solid var(--ai);color:var(--ai);}
+.yr small{display:block;font-size:.66rem;font-weight:400;letter-spacing:.05em;opacity:.85;font-family:inherit;}
+.verdict p{margin:0;font-size:.9rem;color:var(--ink-2);max-width:none;}
+
+.tablewrap{margin-top:24px;overflow-x:auto;}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.86rem;}
+th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--rule-soft);}
+thead th{font-size:.7rem;letter-spacing:.1em;color:var(--muted);font-weight:700;border-bottom:1px solid var(--rule);white-space:nowrap;}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+tbody tr:last-child td{border-bottom:none;}
+tr.mark td{background:var(--shu-wash);font-weight:700;}
+tr.dim td{color:var(--muted);}
+
+.chart{margin-top:26px;}
+.bar-row{display:grid;grid-template-columns:126px 1fr 60px;align-items:center;gap:12px;padding:5px 0;}
+.bar-row .lab{font-size:.8rem;color:var(--ink-2);text-align:right;}
+.bar-row .track{display:block;background:var(--rule-soft);border-radius:2px;height:22px;overflow:hidden;}
+.bar-row .fill{display:block;height:100%;border-radius:2px;background:var(--nezu);}
+.bar-row.peak .fill{background:var(--shu);}
+.bar-row.high .fill{background:var(--kin);}
+.bar-row .val{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;}
+.bar-row.peak .lab,.bar-row.peak .val{color:var(--shu);font-weight:700;}
+.bar-row.high .lab,.bar-row.high .val{color:var(--kin);font-weight:700;}
+
+.caption{margin-top:14px;font-size:.76rem;color:var(--muted);line-height:1.8;padding-left:12px;border-left:2px solid var(--rule);max-width:60ch;}
+
+.callout{margin-top:30px;padding:20px 22px;border-radius:3px;background:var(--ai-wash);border:1px solid var(--rule-soft);}
+.callout h3{margin:0 0 8px;font-size:1rem;color:var(--ai);}
+.callout p{margin:0;font-size:.9rem;color:var(--ink-2);max-width:none;}
+
+.stats{margin-top:26px;display:grid;gap:1px;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));background:var(--rule-soft);border:1px solid var(--rule-soft);border-radius:3px;overflow:hidden;}
+.stat{background:var(--surface);padding:18px 16px;}
+.stat .n{font-family:"Zen Old Mincho",serif;font-size:1.9rem;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;}
+.stat .n small{font-size:.85rem;font-weight:400;margin-left:2px;color:var(--muted);}
+.stat .l{font-size:.73rem;color:var(--muted);line-height:1.7;margin-top:8px;}
+
+ul.notes{margin:18px 0 0;padding:0 0 0 1.1em;font-size:.86rem;color:var(--ink-2);}
+ul.notes li{margin:7px 0;}
+
+footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--rule);font-size:.74rem;color:var(--muted);line-height:1.9;}
+
+@media (max-width:600px){
+  .page{padding:38px 18px 72px;}
+  h1{font-size:1.62rem;}
+  .bar-row{grid-template-columns:96px 1fr 48px;gap:8px;}
+  .bar-row .lab,.bar-row .val{font-size:.72rem;}
+  .verdict{padding:18px 16px;}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+@media print{body{background:#fff;color:#000;}section{page-break-inside:avoid;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="mast">
+  <div class="kicker">ビジネス・キャリア検定　経営戦略 2級</div>
+  <h1>令和8年度は<br>どの年度を狙うか</h1>
+  <p class="standfirst">
+    平成21年度から令和7年度まで、30回分・1,185問を1肢ずつ照合しました。
+    再出題が何年後に起きるかを17年の幅で測り直し、令和8年度に向けて解くべき過去問の年度を絞り込みます。
+  </p>
+  <div class="meta">
+    <span>対象 <b>1,185問（平成625＋令和560）</b></span>
+    <span>検出した再出題ペア <b>1,448組</b></span>
+    <span>集計日 <b>2026年9月5日</b></span>
+  </div>
+</header>
+
+<section>
+  <h2>結論</h2>
+
+  <div class="verdict">
+    <span class="tag">令和8年度に向けて解くべき過去問</span>
+    <div class="yrs">
+      <span class="yr p1">令和5年度<small>3年前・最優先</small></span>
+      <span class="yr p1">令和4年度<small>4年前・最優先</small></span>
+      <span class="yr p2">令和3年度<small>5年前・余力があれば</small></span>
+      <span class="yr p3">令和2年度<small>6年前・さらに余力があれば</small></span>
+    </div>
+    <p>
+      <strong>令和5年度と令和4年度の2年度分（160問）で、本番の60.0%をカバー</strong>できます。
+      合格基準は40問中24問＝60%なので、この2年度がそのまま合格ラインに当たります。
+      令和7年度・令和6年度はほとんど出ません。<strong>平成の過去問は今回やる必要がありません</strong>（後述）。
+    </p>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>覚える範囲</th>
+          <th class="num">直近6試験で検証</th>
+          <th class="num">全18試験で検証</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>令和5年度のみ</td><td class="num">36.7%</td><td class="num">42.5%</td></tr>
+        <tr class="mark"><td>令和5年度＋令和4年度</td><td class="num">60.0%</td><td class="num">61.0%</td></tr>
+        <tr><td>＋令和3年度</td><td class="num">68.8%</td><td class="num">67.8%</td></tr>
+        <tr><td>＋令和2年度</td><td class="num">72.9%</td><td class="num">70.3%</td></tr>
+        <tr class="dim"><td>＋令和6年度</td><td class="num">73.8%</td><td class="num">73.5%</td></tr>
+        <tr class="dim"><td>＋令和元年度・平成30年度</td><td class="num">72.9%</td><td class="num">71.0%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="caption">
+    「直近6試験」は令和5〜7年度の6回、「全18試験」は平成29年度以降の18回を対象に、
+    過去8年分のどこに同じ素材があったかを数えたものです。2つの検証がほぼ同じ値を示しており、結果は安定しています。
+    令和6年度を足しても<strong>+0.9pt</strong>、令和元年度・平成30年度まで広げるとかえって効率が落ちます。
+  </p>
+</section>
+
+<section>
+  <h2>なぜこの2年度なのか ── 3年周期と、6年後の第2の山</h2>
+  <p>
+    1年度ずつ単独で当てはめて、対象年度の問題を何%カバーできるかを測りました。
+    18試験の平均です。
+  </p>
+
+  <div class="chart">
+    <div class="bar-row peak"><span class="lab">3年前（令和5年度）</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">42.5%</span></div>
+    <div class="bar-row high"><span class="lab">6年前（令和2年度）</span><span class="track"><span class="fill" style="width:49.9%"></span></span><span class="val">21.2%</span></div>
+    <div class="bar-row high"><span class="lab">4年前（令和4年度）</span><span class="track"><span class="fill" style="width:45.6%"></span></span><span class="val">19.4%</span></div>
+    <div class="bar-row"><span class="lab">5年前（令和3年度）</span><span class="track"><span class="fill" style="width:33.6%"></span></span><span class="val">14.3%</span></div>
+    <div class="bar-row"><span class="lab">7年前（令和元年度）</span><span class="track"><span class="fill" style="width:33.4%"></span></span><span class="val">14.2%</span></div>
+    <div class="bar-row"><span class="lab">8年前（平成30年度）</span><span class="track"><span class="fill" style="width:29.2%"></span></span><span class="val">12.4%</span></div>
+    <div class="bar-row"><span class="lab">2年前（令和6年度）</span><span class="track"><span class="fill" style="width:17.9%"></span></span><span class="val">7.6%</span></div>
+    <div class="bar-row"><span class="lab">1年前（令和7年度）</span><span class="track"><span class="fill" style="width:1.4%"></span></span><span class="val">0.6%</span></div>
+  </div>
+
+  <p class="caption">
+    平成10年分を足したことで、<strong>3年周期がいっそう明確</strong>になりました。
+    令和7年分だけでは3年後の再出題が127組でしたが、17年分では<strong>374組</strong>です。
+    同時に<strong>6年後に第2の山</strong>が現れました。3年周期の2周目にあたります。
+  </p>
+
+  <h3>ただし6年前は「追加効果」が小さい</h3>
+  <p>
+    令和2年度は単独では21.2%と2番目に高いのですが、その多くは令和5年度にも出ている問題です
+    （3年ごとに繰り返される同じ素材の連鎖）。そのため令和5年度・令和4年度に足したときの伸びは<span class="em-shu">+4.1pt</span>にとどまります。
+    それでも令和6年度の+0.9ptより大きいので、<strong>優先順位は「令和2年度 ＞ 令和6年度」</strong>です。
+  </p>
+</section>
+
+<section>
+  <h2>平成の過去問は、今回はやらなくてよい</h2>
+  <p>
+    今回いただいた平成のデータで最も価値のあった発見です。令和7年度の80問を対象に、素材の供給元を切り分けました。
+  </p>
+
+  <div class="stats">
+    <div class="stat"><div class="n">71.2<small>%</small></div><div class="l">令和元〜6年度<br>だけでカバー</div></div>
+    <div class="stat"><div class="n">41.2<small>%</small></div><div class="l">平成21〜30年度<br>だけでカバー</div></div>
+    <div class="stat"><div class="n">71.2<small>%</small></div><div class="l">両方を使っても<br>同じ（増えない）</div></div>
+    <div class="stat"><div class="n">0<small>%</small></div><div class="l">平成にしか無い<br>素材の割合</div></div>
+  </div>
+
+  <p>
+    令和7年度で出た問題のうち、<strong>平成にしか素材が無いものは1問もありませんでした</strong>。
+    平成の問題は令和にすべて引き継がれており、令和分を解けば平成分は自動的にカバーされます。
+  </p>
+
+  <div class="callout">
+    <h3>ただし数年前までは事情が違いました</h3>
+    <p>
+      令和3〜4年度の頃は「平成にしか無い素材」が20〜32%ありました。
+      令和が7年分たまったいまだからこその結論です。
+      平成の過去問を追加で解く時間は、<strong>令和5年度・令和4年度の精度を上げる時間に回すほうが効率的</strong>です。
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2>前期・後期は両方やる必要があります</h2>
+  <p>
+    3年前のどちらの期から素材が来ているかを調べました。
+  </p>
+
+  <div class="chart">
+    <div class="bar-row"><span class="lab">同じ期から</span><span class="track"><span class="fill" style="width:99%"></span></span><span class="val">21.2%</span></div>
+    <div class="bar-row"><span class="lab">違う期から</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">21.4%</span></div>
+  </div>
+
+  <p class="caption">
+    ほぼ半々です。「令和8年度前期を受けるから令和5年度前期だけ」という絞り方は成り立ちません。
+    <strong>令和5年度は前期・後期あわせて80問すべてが対象</strong>です。令和4年度も同様です。
+  </p>
+</section>
+
+<section>
+  <h2>データの作り方と限界</h2>
+  <ul class="notes">
+    <li>平成16回分（平成21・22・23年度後期、平成24年度前期、平成25〜30年度の前期後期）を新たに抽出し、既存の令和14回分と統合しました。</li>
+    <li>平成22〜24年度は番号付きの設問が35問で、残りは「総合事例問題」（長文事例＋設問5問）でした。令和には無い形式のため集計から外しています。</li>
+    <li>正解表は平成25年度以降がフォント破損しており、文字コードから直接は読めませんでした。表の座標から答えを復元し、<strong>画像を目視した結果と40問すべて一致</strong>することを確認しています。平成26年度前期だけはテキスト層自体が壊れていたため、画像から目視で読み取りました。</li>
+    <li>「同じ素材」の判定は、正規化した選択肢の文字列一致度0.90以上の肢を2つ以上共有し、かつ設問文の一致度が0.50以上のペアとしています。選択肢が「1つ」「2つ」…となる個数選択型は、無関係な問題どうしが機械的に一致するため除外しました。</li>
+    <li>年差ごとの数字は、年差が小さいほど組合せが多くなるバイアスを避けるため、対象試験ごとのカバー率を平均する形で正規化しています。</li>
+    <li>これは過去の傾向から導いた確率であり、令和8年度の出題を保証するものではありません。カバー率60%は「その範囲の問題が出たときに答えられる」上限であって、実際の得点はそこからの理解度で決まります。</li>
+  </ul>
+</section>
+
+<footer>
+  <p>
+    集計対象：平成21年度〜令和7年度 前期・後期（30回分・1,185問・5,925肢）。<br>
+    本ページの分析・数値はAIによる自動照合の結果であり、試験実施団体の公式見解ではありません。
+  </p>
+</footer>
+
+</div>
+</body>
+</html>
