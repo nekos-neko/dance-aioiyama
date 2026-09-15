@@ -299,6 +299,72 @@
   .flag-note-body dt{ margin-top:8px; }
   .flag-note-body dd{ margin:2px 0 0 0; }
   .flag-note-body b{ color:var(--ink); font-weight:600; }
+  /* ===== 10問限定勉強 ===== */
+  .modebar-right{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .drill-btn{
+    background:var(--accent); border:1px solid var(--accent); color:var(--bg);
+    padding:7px 16px; border-radius:2px;
+    font-size:.78rem; font-weight:700; letter-spacing:.03em;
+    font-family:var(--sans); cursor:pointer; white-space:nowrap;
+  }
+  .drill-btn:hover{ filter:brightness(1.08); }
+  .drill-btn:disabled{ opacity:.4; cursor:default; filter:none; }
+  .drill-bar{
+    background:rgba(111,168,224,0.07);
+    border:1px solid var(--accent-dim);
+    border-radius:4px; padding:11px 13px; margin-bottom:14px;
+  }
+  .drill-head{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .drill-title{ font-family:var(--serif); font-size:.86rem; font-weight:700; color:var(--accent); }
+  .drill-round{ font-size:.74rem; color:var(--ink-dim); letter-spacing:.03em; }
+  .drill-quit{
+    margin-left:auto; background:none; border:none; color:var(--ink-dim);
+    font-size:.72rem; text-decoration:underline; cursor:pointer;
+    font-family:var(--sans); padding:0;
+  }
+  .drill-quit:hover{ color:var(--wrong); }
+  .drill-dots{ display:flex; gap:5px; flex-wrap:wrap; margin-top:9px; }
+  .dot{
+    width:22px; height:22px; border-radius:50%;
+    border:1px solid var(--panel-border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:.62rem; color:var(--ink-dim); font-family:var(--sans);
+    font-variant-numeric:tabular-nums;
+  }
+  .dot.ok{ background:var(--correct); border-color:var(--correct); color:var(--bg); font-weight:700; }
+  .dot.ng{ background:var(--wrong); border-color:var(--wrong); color:#fff; font-weight:700; }
+  .dot.now{ border-color:var(--accent); color:var(--accent); font-weight:700;
+            box-shadow:0 0 0 2px rgba(111,168,224,0.25); }
+  /* 結果・完了画面 */
+  .drill-result{ text-align:center; padding:28px 12px 12px; }
+  .drill-result h2{ font-family:var(--serif); font-size:1.28rem; font-weight:700; margin:0 0 8px; }
+  .drill-result h2.done{ color:var(--correct); }
+  .drill-result .lead{ font-size:.85rem; color:var(--ink-dim); line-height:1.9; margin:0; }
+  .drill-score{
+    font-family:var(--serif); font-size:2.5rem; font-weight:700;
+    color:var(--accent); margin:18px 0 2px; line-height:1.1;
+    font-variant-numeric:tabular-nums;
+  }
+  .drill-score small{ font-size:.95rem; color:var(--ink-dim); font-weight:400; margin-left:3px; }
+  .drill-list{
+    text-align:left; margin:22px auto 0; max-width:520px;
+    display:flex; flex-direction:column; gap:7px;
+  }
+  .drill-list .r{
+    display:grid; grid-template-columns:auto 1fr; gap:10px;
+    background:var(--panel); border:1px solid var(--panel-border);
+    border-left:2px solid var(--wrong); border-radius:0 3px 3px 0;
+    padding:8px 11px; font-size:.78rem; line-height:1.7; color:var(--ink-dim);
+  }
+  .drill-list .r .id{ font-family:var(--serif); color:var(--wrong); white-space:nowrap; }
+  .drill-actions{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:26px; }
+  .drill-log{ margin-top:22px; font-size:.74rem; color:var(--ink-dim); line-height:2; }
+  .drill-log b{ color:var(--accent); font-weight:600; }
+  @media (max-width:480px){
+    .drill-result{ padding:22px 4px 8px; }
+    .drill-score{ font-size:2.1rem; }
+    .drill-actions .next-btn, .drill-actions .mode-btn{ width:100%; }
+  }
   /* 出題実績 */
   .history{
     margin-top:14px;
@@ -694,7 +760,19 @@
       <button class="mode-btn" id="modeFreq">頻出のみ（<span id="freqCount">0</span>）</button>
       <button class="mode-btn" id="modeR8">令和8年度 予想（<span id="r8Count">0</span>）</button>
     </div>
-    <button class="reset-link" id="resetBtn">苦手リストをリセット</button>
+    <div class="modebar-right">
+      <button class="drill-btn" id="drillBtn">10問限定勉強</button>
+      <button class="reset-link" id="resetBtn">苦手リストをリセット</button>
+    </div>
+  </div>
+
+  <div class="drill-bar" id="drillBar" style="display:none;">
+    <div class="drill-head">
+      <span class="drill-title">10問限定勉強</span>
+      <span class="drill-round" id="drillRound"></span>
+      <button class="drill-quit" id="drillQuit">やめる</button>
+    </div>
+    <div class="drill-dots" id="drillDots"></div>
   </div>
 
   <div class="flag-note" id="flagNote">
@@ -6093,10 +6171,22 @@ function updateWeakUI(){
 
   document.getElementById("r8Count").textContent = allQuestions().filter(q => isR8(q)).length;
   // 予想モード中は年度・期ボタンを無効化
-  const lock = (mode === "r8");
+  const lock = (mode === "r8") || drillActive();
+  const dlock = drillActive();
+  if(dlock){
+    // 10問限定モード中はモードの切替を固定する
+    ["modeAll","modeWeak","modeFreq","modeR8"].forEach(id =>
+      document.getElementById(id).disabled = true);
+  } else {
+    // 苦手・頻出はこの関数の前半で件数に応じて設定済み
+    document.getElementById("modeAll").disabled = false;
+    document.getElementById("modeR8").disabled = false;
+  }
+  const db = document.getElementById("drillBtn");
+  if(db) db.disabled = dlock;
   document.querySelectorAll("#yearBar .period-btn, #termBar .period-btn")
     .forEach(b => { b.disabled = lock; b.style.opacity = lock ? .35 : 1; });
-  document.getElementById("r8Note").style.display = lock ? "block" : "none";
+  document.getElementById("r8Note").style.display = (mode === "r8") ? "block" : "none";
 }
 
 function renderEmptyWeak(){
@@ -6177,6 +6267,8 @@ function renderQuestion(q){
   // すでに解答済みの問題に戻ってきた場合は解答状態を復元する
   const prevAns = answeredMap.get(qKey(current));
   if(prevAns !== undefined) selectAnswer(prevAns, true);
+
+  drillDecorate();   // 10問限定モードのときは操作を差し替える
 }
 
 // restoring=true のときは履歴から戻った際の再描画。スコアや苦手リストは更新しない
@@ -6204,6 +6296,14 @@ function selectAnswer(i, restoring){
     }
     saveWrongSet();
     updateWeakUI();
+
+    if(drillActive() && drill.marks[drill.idx] === null){
+      drill.marks[drill.idx] = ok;
+      if(!ok) drill.wrong.push(current);
+      drillRenderBar();
+      const nb = document.getElementById("nextBtn");
+      if(nb) nb.disabled = false;
+    }
   }
 
   document.getElementById("correctLabel").textContent = LABELS[current.correct];
@@ -6388,9 +6488,189 @@ document.addEventListener("keydown", e=>{
     if(e.key === "Escape") glossClose();
     return;
   }
+  if(drillActive()){
+    if(e.key === "ArrowRight"){
+      const nb = document.getElementById("nextBtn");
+      if(nb && !nb.disabled) nb.click();
+    }
+    return;   // 10問限定モードでは前の問題に戻らない
+  }
   if(e.key === "ArrowLeft"){ prevQuestion(); }
   else if(e.key === "ArrowRight"){ nextQuestion(); }
 });
+
+
+/* ===== 10問限定勉強 =====
+   いまの絞り込み条件から10問を出題し、間違えた問題だけを次のラウンドで
+   繰り返す。全問正解したら完了。 */
+const DRILL_SIZE = 10;
+let drill = null;
+// { size, round, queue[], marks[], wrong[], idx, firstCorrect, log[] }
+
+function drillActive(){ return drill !== null; }
+
+function startDrill(){
+  const qs = currentQuestionSet();
+  if(qs.length === 0){ renderEmptyWeak(); return; }
+  const n = Math.min(DRILL_SIZE, qs.length);
+  const picked = [...qs].sort(()=>Math.random()-0.5).slice(0, n);
+  drill = {
+    size: n, round: 1,
+    original: picked,              // このセッションで出題した元の10問
+    queue: [...picked],
+    marks: new Array(n).fill(null),
+    wrong: [], idx: 0, firstCorrect: 0, log: []
+  };
+  resetHistory();
+  updateWeakUI();
+  drillRenderBar();
+  drillShow();
+}
+
+function quitDrill(){
+  drill = null;
+  document.getElementById("drillBar").style.display = "none";
+  updateWeakUI();
+  resetHistory();
+  reshuffle();
+  nextQuestion();
+}
+
+function drillRenderBar(){
+  const bar = document.getElementById("drillBar");
+  if(!drillActive()){ bar.style.display = "none"; return; }
+  bar.style.display = "block";
+  document.getElementById("drillRound").textContent =
+    "第" + drill.round + "ラウンド　" + drill.queue.length + "問";
+  const dots = document.getElementById("drillDots");
+  dots.innerHTML = "";
+  drill.queue.forEach((q, i)=>{
+    const d = document.createElement("span");
+    let cls = "dot";
+    if(drill.marks[i] === true) cls += " ok";
+    else if(drill.marks[i] === false) cls += " ng";
+    else if(i === drill.idx) cls += " now";
+    d.className = cls;
+    d.textContent = (drill.marks[i] === true) ? "○" : (drill.marks[i] === false) ? "×" : (i + 1);
+    dots.appendChild(d);
+  });
+}
+
+function drillShow(){
+  if(drill.idx >= drill.queue.length){ drillRoundEnd(); return; }
+  const q = drill.queue[drill.idx];
+  visited = [q];
+  visitedPos = 0;
+  drillRenderBar();
+  renderQuestion(q);
+}
+
+function drillAdvance(){
+  drill.idx++;
+  drillShow();
+}
+
+// 出題カードを10問限定モード用に整える（renderQuestion の最後で呼ぶ）
+function drillDecorate(){
+  if(!drillActive()) return;
+  const prev = document.getElementById("prevBtn");
+  if(prev) prev.style.display = "none";
+  const pos = document.getElementById("posIndicator");
+  if(pos) pos.textContent = (drill.idx + 1) + " / " + drill.queue.length + " 問目";
+  const nb = document.getElementById("nextBtn");
+  if(nb){
+    nb.onclick = drillAdvance;
+    nb.textContent = (drill.idx === drill.queue.length - 1) ? "結果を見る" : "次の問題へ";
+    nb.disabled = (drill.marks[drill.idx] === null);   // 解答するまで進めない
+  }
+}
+
+// 1ラウンド終了
+function drillRoundEnd(){
+  const wrongN = drill.wrong.length;
+  const okN = drill.queue.length - wrongN;
+  if(drill.round === 1) drill.firstCorrect = okN;
+  drill.log.push({ round: drill.round, n: drill.queue.length, ok: okN });
+  if(wrongN === 0) drillRenderDone();
+  else drillRenderRound(okN, wrongN);
+}
+
+function drillRenderRound(okN, wrongN){
+  drillRenderBar();
+  const rows = drill.wrong.map(q =>
+    '<div class="r"><span class="id">' + YEAR_LABEL[q.year] + " " + q.period + " 問" + q.n + '</span>'
+    + '<span>' + escHtml(q.q.replace(/\n/g, " ")).slice(0, 90) + '</span></div>').join("");
+  document.getElementById("cardArea").innerHTML =
+    '<div class="drill-result">'
+    + '<h2>第' + drill.round + 'ラウンド　終了</h2>'
+    + '<div class="drill-score">' + okN + '<small>/ ' + drill.queue.length + ' 問正解</small></div>'
+    + '<p class="lead">間違えた <b>' + wrongN + '</b> 問をもう一度解きます。<br>全問正解するまで繰り返します。</p>'
+    + '<div class="drill-list">' + rows + '</div>'
+    + '<div class="drill-actions">'
+    + '<button class="next-btn" id="drillAgain">間違えた ' + wrongN + ' 問をもう一度</button>'
+    + '<button class="mode-btn" id="drillSame">この10問を最初からやり直す</button>'
+    + '<button class="mode-btn" id="drillStop">ここでやめる</button>'
+    + '</div></div>';
+  document.getElementById("drillAgain").onclick = drillNextRound;
+  document.getElementById("drillSame").onclick = drillReplaySame;
+  document.getElementById("drillStop").onclick = quitDrill;
+}
+
+function drillNextRound(){
+  drill.round++;
+  drill.queue = [...drill.wrong].sort(()=>Math.random()-0.5);
+  drill.marks = new Array(drill.queue.length).fill(null);
+  drill.wrong = [];
+  drill.idx = 0;
+  resetHistory();          // 前ラウンドの解答状態を持ち越さない
+  drillShow();
+}
+
+// 同じ10問を第1ラウンドからやり直す（正解・不正解の記録はリセット）
+function drillReplaySame(){
+  drill.round = 1;
+  drill.queue = [...drill.original].sort(()=>Math.random()-0.5);
+  drill.marks = new Array(drill.queue.length).fill(null);
+  drill.wrong = [];
+  drill.idx = 0;
+  drill.firstCorrect = 0;
+  drill.log = [];
+  resetHistory();
+  drillRenderBar();
+  drillShow();
+}
+
+function drillRenderDone(){
+  document.getElementById("drillBar").style.display = "none";
+  const rounds = drill.log.length;
+  const logHtml = drill.log.map(l =>
+    "第" + l.round + "ラウンド " + l.ok + "/" + l.n + "問正解").join("　→　");
+  const rate = Math.round(100 * drill.firstCorrect / drill.size);
+  document.getElementById("cardArea").innerHTML =
+    '<div class="drill-result">'
+    + '<h2 class="done">完了しました</h2>'
+    + '<div class="drill-score">' + drill.size + '<small>問すべて正解</small></div>'
+    + '<p class="lead">' + rounds + 'ラウンドで到達しました。<br>'
+    + '1回目で正解できたのは <b>' + drill.firstCorrect + ' / ' + drill.size + '問</b>（' + rate + '%）です。</p>'
+    + '<div class="drill-log">' + logHtml + '</div>'
+    + '<div class="drill-actions">'
+    + '<button class="next-btn" id="drillSameDone">再度同じ問題を解く</button>'
+    + '<button class="mode-btn" id="drillMore">同じ条件で新しい10問</button>'
+    + '<button class="mode-btn" id="drillEnd">通常モードに戻る</button>'
+    + '</div></div>';
+  document.getElementById("drillSameDone").onclick = drillReplaySame;
+  document.getElementById("drillMore").onclick = startDrill;
+  document.getElementById("drillEnd").onclick = quitDrill;
+}
+
+document.getElementById("drillBtn").onclick = startDrill;
+document.getElementById("drillQuit").onclick = ()=>{
+  if(drill && drill.idx === 0 && drill.round === 1 && drill.marks.every(m => m === null)){
+    quitDrill();
+  } else if(confirm("10問限定勉強をやめて通常モードに戻ります。よろしいですか？")){
+    quitDrill();
+  }
+};
 
 (function init(){
   loadTheme();
