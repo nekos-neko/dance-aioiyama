@@ -744,7 +744,7 @@
 </style>
 </head>
 <body>
-<div class="ver">ver1.2.1</div>
+<div class="ver">ver1.2.2</div>
 <div class="wrap">
   <div class="masthead">
     <div>
@@ -7733,10 +7733,11 @@ const YEAR_LABEL = {
   R7: "令和7年度", R6: "令和6年度", R5: "令和5年度", R4: "令和4年度",
   R3: "令和3年度", R2: "令和2年度", R1: "令和元年度"
 };
+const YEAR_ORDER = ["R7","R6","R5","R4","R3","R2","R1"];
 
 let wrongSet = new Set();
 let mode = "all"; // "all" | "weak" | "r8"
-let yearFilter = "all"; // "all" | "R7"〜"R1"
+let yearFilter = new Set(["all"]); // {"all"} または {"R7","R5",...} のような複数年度の組み合わせ
 let termFilter = "all"; // "all" | "前期" | "後期"
 let pool = [];
 let current = null;
@@ -7814,7 +7815,7 @@ function saveWrongSet(){
 
 function scopeFiltered(list){
   return list.filter(q =>
-    (yearFilter === "all" || q.year === yearFilter) &&
+    (yearFilter.has("all") || yearFilter.has(q.year)) &&
     (termFilter === "all" || q.period === termFilter)
   );
 }
@@ -7859,7 +7860,8 @@ function updateScopeInfo(){
     return;
   }
   const inScope = scopeFiltered(allQuestions());
-  const yLabel = yearFilter === "all" ? "全年度" : YEAR_LABEL[yearFilter];
+  const yLabel = yearFilter.has("all") ? "全年度"
+    : YEAR_ORDER.filter(y => yearFilter.has(y)).map(y => YEAR_LABEL[y]).join("・");
   const tLabel = termFilter === "all" ? "前期＋後期" : termFilter + "のみ";
   const freqAll = inScope.filter(q => isFreq(q));
   if(mode === "freq"){
@@ -8112,9 +8114,19 @@ function switchMode(newMode){
 }
 
 function switchYear(newYear){
-  yearFilter = newYear;
+  if(newYear === "all"){
+    yearFilter = new Set(["all"]);
+  } else {
+    if(yearFilter.has("all")) yearFilter = new Set();
+    if(yearFilter.has(newYear)){
+      yearFilter.delete(newYear);
+      if(yearFilter.size === 0) yearFilter = new Set(["all"]);
+    } else {
+      yearFilter.add(newYear);
+    }
+  }
   document.querySelectorAll("#yearBar .period-btn").forEach(b =>
-    b.classList.toggle("active", b.dataset.year === yearFilter));
+    b.classList.toggle("active", yearFilter.has(b.dataset.year)));
   refreshAfterScope();
 }
 
