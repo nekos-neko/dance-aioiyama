@@ -736,9 +736,15 @@
     .gloss-body{ font-size:.9rem; }
     .gloss-close{ padding:9px 13px; }
   }
+  .ver{
+    position:fixed; top:calc(8px + env(safe-area-inset-top)); right:calc(10px + env(safe-area-inset-right));
+    font-size:.65rem; color:var(--ink-dim); opacity:.6; letter-spacing:.02em;
+    font-family:var(--sans); pointer-events:none; z-index:1000;
+  }
 </style>
 </head>
 <body>
+<div class="ver">ver1.2.1</div>
 <div class="wrap">
   <div class="masthead">
     <div>
