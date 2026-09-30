@@ -56,9 +56,15 @@ a.card .d{font-size:.78rem;color:var(--dim);margin-top:5px;line-height:1.75;}
   font-size:.73rem;color:var(--dim);line-height:1.9;
 }
 .note b{color:var(--ink);font-weight:600;}
+.ver{
+  position:fixed;top:calc(8px + env(safe-area-inset-top));right:calc(10px + env(safe-area-inset-right));
+  font-size:.65rem;color:var(--dim);opacity:.6;letter-spacing:.02em;
+  font-family:var(--sans);pointer-events:none;
+}
 </style>
 </head>
 <body>
+<div class="ver">ver1.2.2</div>
 <div class="wrap">
   <h1>総務 2級 ｜ 学習ツール</h1>
   <div class="sub">ビジネス・キャリア検定試験　令和8年度受験用</div>
@@ -66,7 +72,7 @@ a.card .d{font-size:.78rem;color:var(--dim);margin-top:5px;line-height:1.75;}
   <div class="grid">
     <a class="card" href="soumu_quiz_2.html">
       <div class="t">一問一答クイズ</div>
-      <div class="d">平成26年度〜令和7年度の920問。苦手問題の記録、必修・重要・丸暗記可・頻出フラグ、用語ポップアップ、令和8年度予想モード、10問限定勉強。</div>
+      <div class="d">平成26年度〜令和7年度の920問。苦手問題の記録、必修・重要・丸暗記可・頻出フラグ、用語ポップアップ、令和8年度予想モード、10問限定勉強（選択肢シャッフル）。</div>
     </a>
     <a class="card" href="soumu_seikai_ichiran.html">
       <div class="t">正解一覧</div>

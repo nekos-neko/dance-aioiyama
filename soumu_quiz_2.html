@@ -418,6 +418,27 @@
     margin-bottom:26px;
     white-space:pre-wrap;
   }
+  .qfig-wrap{
+    display:none;
+    margin:0 0 22px;
+    padding:16px;
+    background:#ffffff;
+    border:1px solid var(--panel-border);
+    border-radius:4px;
+    text-align:center;
+  }
+  .qfig-wrap.show{ display:block; }
+  .qfig-wrap img{
+    max-width:100%;
+    height:auto;
+    display:inline-block;
+  }
+  .qfig-cap{
+    margin-top:9px;
+    font-size:.72rem;
+    color:#64748b;
+    letter-spacing:.03em;
+  }
   .options{
     display:flex;
     flex-direction:column;
@@ -604,6 +625,7 @@
     .masthead h1{ font-size:1.02rem; }
     .card{ padding:22px 16px; }
     .qtext{ font-size:1rem; line-height:1.8; }
+    .qfig-wrap{ padding:11px; margin-bottom:18px; }
     .opt{ padding:14px 13px; font-size:.95rem; }
     .mode-btn,.period-btn{ padding:9px 13px; font-size:.8rem; }
     .next-btn{ padding:12px 24px; font-size:.9rem; }
@@ -714,9 +736,15 @@
     .gloss-body{ font-size:.9rem; }
     .gloss-close{ padding:9px 13px; }
   }
+  .ver{
+    position:fixed; top:calc(8px + env(safe-area-inset-top)); right:calc(10px + env(safe-area-inset-right));
+    font-size:.65rem; color:var(--ink-dim); opacity:.6; letter-spacing:.02em;
+    font-family:var(--sans); pointer-events:none; z-index:1000;
+  }
 </style>
 </head>
 <body>
+<div class="ver">ver1.2.2</div>
 <div class="wrap">
   <div class="masthead">
     <div>
@@ -6051,10 +6079,11 @@ const ALL_QUESTIONS = [
 const YEAR_LABEL = {
   R7: "令和7年度", R6: "令和6年度", R5: "令和5年度", R4: "令和4年度", R3: "令和3年度", R2: "令和2年度", R1: "令和元年度", H30: "平成30年度", H29: "平成29年度", H28: "平成28年度", H27: "平成27年度", H26: "平成26年度"
 };
+const YEAR_ORDER = ["R7","R6","R5","R4","R3","R2","R1","H30","H29","H28","H27","H26"];
 
 let wrongSet = new Set();
 let mode = "all"; // "all" | "weak" | "r8"
-let yearFilter = "all"; // "all" | "R7"〜"R1"
+let yearFilter = new Set(["all"]); // {"all"} または {"R7","R5",...} のような複数年度の組み合わせ
 let termFilter = "all"; // "all" | "前期" | "後期"
 let pool = [];
 let current = null;
@@ -6063,12 +6092,48 @@ let asked = 0, correctCnt = 0;
 // ---- 出題履歴（前の問題へ戻る用）----
 let visited = [];        // 表示した問題を出題順に保持
 let visitedPos = -1;     // visited 内の現在位置
-let answeredMap = new Map(); // qKey → 選んだ選択肢index（採点済みの復元用）
+let answeredMap = new Map(); // qKey → 選んだ選択肢index（採点済みの復元用。並べ替え後の表示位置）
+let permMap = new Map();     // qKey → 選択肢の並び順（10問限定モードでシャッフルした結果を保持）
+let currentPerm = [0,1,2,3,4]; // 表示位置 i に元データの opts[currentPerm[i]] を出す
 
 function resetHistory(){
   visited = [];
   visitedPos = -1;
   answeredMap.clear();
+  permMap.clear();
+}
+
+// ---- 10問限定モードの選択肢シャッフル ----
+// 「ａ～ｅのうち…いくつあるか」形式は選択肢が昇順の個数なので並べ替えない
+function isCountType(q){ return q.q.indexOf("いくつあるか") >= 0; }
+
+function shuffledIndices(){
+  const a = [0,1,2,3,4];
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+// 同じラウンド中は同じ並びを返す（前の問題に戻っても表示がずれない）
+function getPerm(q){
+  if(!drillActive() || isCountType(q)) return [0,1,2,3,4];
+  const key = qKey(q);
+  if(!permMap.has(key)) permMap.set(key, shuffledIndices());
+  return permMap.get(key);
+}
+
+// 解説文中の「アが正解」「イほど〜」のような選択肢ラベルを、今の並び順に合わせて書き換える。
+// 「アンゾフ」「イノベーション」など単語の一部や「ア～オ」の範囲表記は対象外。
+// 一度に置き換えるので「ア→イ→ウ」のような連鎖置換は起きない。
+const LABEL_REF = /(^|[^ァ-ヶー～〜])([アイウエオ])(?![ァ-ヶー～〜])/g;
+function remapLabels(text){
+  if(!text) return text;
+  return text.replace(LABEL_REF, (m, pre, ch)=>{
+    const src = LABELS.indexOf(ch);
+    return pre + LABELS[currentPerm.indexOf(src)];
+  });
 }
 
 function allQuestions(){
@@ -6096,7 +6161,7 @@ function saveWrongSet(){
 
 function scopeFiltered(list){
   return list.filter(q =>
-    (yearFilter === "all" || q.year === yearFilter) &&
+    (yearFilter.has("all") || yearFilter.has(q.year)) &&
     (termFilter === "all" || q.period === termFilter)
   );
 }
@@ -6141,7 +6206,8 @@ function updateScopeInfo(){
     return;
   }
   const inScope = scopeFiltered(allQuestions());
-  const yLabel = yearFilter === "all" ? "全年度" : YEAR_LABEL[yearFilter];
+  const yLabel = yearFilter.has("all") ? "全年度"
+    : YEAR_ORDER.filter(y => yearFilter.has(y)).map(y => YEAR_LABEL[y]).join("・");
   const tLabel = termFilter === "all" ? "前期＋後期" : termFilter + "のみ";
   const freqAll = inScope.filter(q => isFreq(q));
   if(mode === "freq"){
@@ -6233,6 +6299,7 @@ function renderQuestion(q){
       <span class="weak-tag" id="weakTag" style="display:${wrongSet.has(qKey(current)) ? "inline-block" : "none"};">苦手</span>
     </div>
     <div class="qtext" id="qtext"></div>
+    <div class="qfig-wrap" id="qfigWrap"><img id="qfigImg" alt="設問の図"><div class="qfig-cap">問題文中の図（原本より再現）</div></div>
     <div class="options" id="options"></div>
     <div class="result" id="result">
       <div class="answer-line">正解：<b id="correctLabel">—</b></div>
@@ -6249,11 +6316,19 @@ function renderQuestion(q){
     </div>
   `;
   document.getElementById("qtext").innerHTML = linkifyTerms(current.q, true);
+  const figWrap = document.getElementById("qfigWrap");
+  if(current.img){
+    document.getElementById("qfigImg").src = current.img;
+    figWrap.classList.add("show");
+  } else {
+    figWrap.classList.remove("show");
+  }
+  currentPerm = getPerm(current);
   const optsDiv = document.getElementById("options");
-  current.opts.forEach((text, i)=>{
+  currentPerm.forEach((srcIdx, i)=>{
     const btn = document.createElement("button");
     btn.className = "opt";
-    btn.innerHTML = '<span class="lbl">' + LABELS[i] + '</span><span>' + text + '</span>';
+    btn.innerHTML = '<span class="lbl">' + LABELS[i] + '</span><span>' + current.opts[srcIdx] + '</span>';
     btn.onclick = ()=> selectAnswer(i);
     optsDiv.appendChild(btn);
   });
@@ -6275,8 +6350,9 @@ function renderQuestion(q){
 function selectAnswer(i, restoring){
   const buttons = document.querySelectorAll(".opt");
   buttons.forEach(b=>b.disabled = true);
-  buttons[current.correct].classList.add("correct");
-  const ok = (i === current.correct);
+  const correctPos = currentPerm.indexOf(current.correct);   // 正解が今表示されている位置
+  buttons[correctPos].classList.add("correct");
+  const ok = (currentPerm[i] === current.correct);
   if(!ok){
     buttons[i].classList.add("wrong");
   }
@@ -6306,19 +6382,20 @@ function selectAnswer(i, restoring){
     }
   }
 
-  document.getElementById("correctLabel").textContent = LABELS[current.correct];
+  document.getElementById("correctLabel").textContent = LABELS[correctPos];
   const verdict = document.getElementById("verdict");
   verdict.textContent = ok ? "正解です。" : "不正解です。";
   verdict.className = "verdict " + (ok ? "ok" : "ng");
   let exText = current.ex;
   if(current.note) exText = current.note + "\n" + exText;
-  document.getElementById("explain").innerHTML = linkifyTerms(exText);
+  document.getElementById("explain").innerHTML = linkifyTerms(remapLabels(exText));
   document.getElementById("result").classList.add("show");
 
   const detailList = document.getElementById("detailList");
   detailList.innerHTML = "";
-  current.optEx.forEach((text, idx)=>{
-    const isCorrect = (idx === current.correct);
+  currentPerm.forEach((srcIdx, idx)=>{
+    const text = current.optEx[srcIdx];
+    const isCorrect = (srcIdx === current.correct);
     const item = document.createElement("div");
     item.className = "detail-item " + (isCorrect ? "is-correct" : "is-wrong");
     item.innerHTML = `
@@ -6326,7 +6403,7 @@ function selectAnswer(i, restoring){
         <span class="lbl">${LABELS[idx]}</span>
         <span class="tag ${isCorrect ? "ok" : "ng"}">${isCorrect ? "正解の選択肢" : "誤りの選択肢"}</span>
       </div>
-      <div class="detail-text">${linkifyTerms(text)}</div>
+      <div class="detail-text">${linkifyTerms(remapLabels(text))}</div>
     `;
     detailList.appendChild(item);
   });
@@ -6383,9 +6460,19 @@ function switchMode(newMode){
 }
 
 function switchYear(newYear){
-  yearFilter = newYear;
+  if(newYear === "all"){
+    yearFilter = new Set(["all"]);
+  } else {
+    if(yearFilter.has("all")) yearFilter = new Set();
+    if(yearFilter.has(newYear)){
+      yearFilter.delete(newYear);
+      if(yearFilter.size === 0) yearFilter = new Set(["all"]);
+    } else {
+      yearFilter.add(newYear);
+    }
+  }
   document.querySelectorAll("#yearBar .period-btn").forEach(b =>
-    b.classList.toggle("active", b.dataset.year === yearFilter));
+    b.classList.toggle("active", yearFilter.has(b.dataset.year)));
   refreshAfterScope();
 }
 
@@ -6415,7 +6502,7 @@ document.getElementById("resetBtn").onclick = ()=>{
   }
 };
 
-const THEME_KEY = "keiei_senryaku_theme";
+const THEME_KEY = "soumu_theme";
 
 function applyTheme(theme){
   document.documentElement.setAttribute("data-theme", theme);
@@ -6440,7 +6527,7 @@ function toggleTheme(){
 document.getElementById("themeToggle").onclick = toggleTheme;
 
 // ---- 予想モードの説明文の開閉（状態は端末に保存）----
-const R8NOTE_KEY = "keiei_senryaku_r8note_open";
+const R8NOTE_KEY = "soumu_r8note_open";
 
 function applyR8Note(open){
   const box = document.getElementById("r8Note");
