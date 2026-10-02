@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="総務2級">
 <meta name="theme-color" content="#151d2a">
 <meta name="format-detection" content="telephone=no">
-<title>総務2級 一問一答</title>
+<title>総務2級 問題指定</title>
 <style>
   :root{
     --bg: #151d2a;
@@ -741,6 +741,22 @@
     font-size:.65rem; color:var(--ink-dim); opacity:.6; letter-spacing:.02em;
     font-family:var(--sans); pointer-events:none; z-index:1000;
   }
+  .picker{
+    display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px;
+    margin-bottom:18px;
+  }
+  .picker label{
+    display:flex; flex-direction:column; gap:4px;
+    font-size:.7rem; color:var(--ink-dim); letter-spacing:.05em;
+  }
+  .picker select{
+    background:var(--panel); color:var(--ink);
+    border:1px solid var(--panel-border); border-radius:2px;
+    padding:7px 10px; font-size:.85rem; font-family:var(--sans);
+    min-width:7.5em; cursor:pointer;
+  }
+  .picker select:focus{ outline:none; border-color:var(--accent-dim); }
+  .next-btn:disabled{ opacity:.3; cursor:default; }
 </style>
 </head>
 <body>
@@ -748,7 +764,7 @@
 <div class="wrap">
   <div class="masthead">
     <div>
-      <h1>総務 2級 ｜ 一問一答</h1>
+      <h1>総務 2級 ｜ 問題指定</h1>
       <div class="sub">ビジネス・キャリア検定試験 過去問題集（平成26年度〜令和7年度・920問）</div>
     </div>
     <div style="display:flex; align-items:center; gap:12px;">
@@ -757,50 +773,10 @@
     </div>
   </div>
 
-  <div class="periodbar" id="yearBar">
-    <button class="period-btn active" data-year="all">全年度</button>
-    <button class="period-btn" data-year="R7">令和7年度</button>
-    <button class="period-btn" data-year="R6">令和6年度</button>
-    <button class="period-btn" data-year="R5">令和5年度</button>
-    <button class="period-btn" data-year="R4">令和4年度</button>
-    <button class="period-btn" data-year="R3">令和3年度</button>
-    <button class="period-btn" data-year="R2">令和2年度</button>
-    <button class="period-btn" data-year="R1">令和元年度</button>
-    <button class="period-btn" data-year="H30">平成30年度</button>
-    <button class="period-btn" data-year="H29">平成29年度</button>
-    <button class="period-btn" data-year="H28">平成28年度</button>
-    <button class="period-btn" data-year="H27">平成27年度</button>
-    <button class="period-btn" data-year="H26">平成26年度</button>
-  </div>
-
-  <div class="periodbar" id="termBar">
-    <button class="period-btn active" data-term="all">前期＋後期</button>
-    <button class="period-btn" data-term="前期">前期のみ</button>
-    <button class="period-btn" data-term="後期">後期のみ</button>
-  </div>
-
-  <div class="scope-info" id="scopeInfo"></div>
-
-  <div class="modebar">
-    <div class="mode-toggle">
-      <button class="mode-btn active" id="modeAll">全問</button>
-      <button class="mode-btn" id="modeWeak">苦手問題のみ（<span id="weakCount">0</span>）</button>
-      <button class="mode-btn" id="modeFreq">頻出のみ（<span id="freqCount">0</span>）</button>
-      <button class="mode-btn" id="modeR8">令和8年度 予想（<span id="r8Count">0</span>）</button>
-    </div>
-    <div class="modebar-right">
-      <button class="drill-btn" id="drillBtn">10問限定勉強</button>
-      <button class="reset-link" id="resetBtn">苦手リストをリセット</button>
-    </div>
-  </div>
-
-  <div class="drill-bar" id="drillBar" style="display:none;">
-    <div class="drill-head">
-      <span class="drill-title">10問限定勉強</span>
-      <span class="drill-round" id="drillRound"></span>
-      <button class="drill-quit" id="drillQuit">やめる</button>
-    </div>
-    <div class="drill-dots" id="drillDots"></div>
+  <div class="picker">
+    <label>年度<select id="selYear"></select></label>
+    <label>前期・後期<select id="selTerm"></select></label>
+    <label>問題番号<select id="selNo"></select></label>
   </div>
 
   <div class="flag-note" id="flagNote">
@@ -823,18 +799,6 @@
         <dd>12年分での出題回数。範囲を絞る根拠ではなく、その論点が試験の主題であることを示す参考情報です。</dd>
         </dl>
       
-    </div>
-  </div>
-
-  <div class="r8-note" id="r8Note" style="display:none;">
-    <button class="r8-note-head" id="r8NoteToggle" aria-expanded="false">
-      <span class="caret">▶</span><span>令和8年度 予想モード　この120問を選んだ理由</span>
-    </button>
-    <div class="r8-note-body">
-      平成26年度〜令和7年度の920問を照合したところ、再出題は<b>3年後（183件）・4年後（97件）</b>に集中し、
-      1〜2年後の再出題はごくわずかでした。この法則から、令和5年度・令和4年度の出題を中心に
-      <b>令和8年度に問われる可能性が高い120問</b>を抽出しています。
-      （過去年度で検証すると、3年前＋4年前の2年度分で令和7年度59％・令和6年度55％・令和5年度49％を捕捉できました）
     </div>
   </div>
 
@@ -6082,63 +6046,10 @@ const YEAR_LABEL = {
 const YEAR_ORDER = ["R7","R6","R5","R4","R3","R2","R1","H30","H29","H28","H27","H26"];
 
 let wrongSet = new Set();
-let mode = "all"; // "all" | "weak" | "r8"
-let yearFilter = new Set(["all"]); // {"all"} または {"R7","R5",...} のような複数年度の組み合わせ
-let termFilter = "all"; // "all" | "前期" | "後期"
-let pool = [];
 let current = null;
 let asked = 0, correctCnt = 0;
 
-// ---- 出題履歴（前の問題へ戻る用）----
-let visited = [];        // 表示した問題を出題順に保持
-let visitedPos = -1;     // visited 内の現在位置
-let answeredMap = new Map(); // qKey → 選んだ選択肢index（採点済みの復元用。並べ替え後の表示位置）
-let permMap = new Map();     // qKey → 選択肢の並び順（10問限定モードでシャッフルした結果を保持）
-let currentPerm = [0,1,2,3,4]; // 表示位置 i に元データの opts[currentPerm[i]] を出す
-
-function resetHistory(){
-  visited = [];
-  visitedPos = -1;
-  answeredMap.clear();
-  permMap.clear();
-}
-
-// ---- 10問限定モードの選択肢シャッフル ----
-// 「ａ～ｅのうち…いくつあるか」形式は選択肢が昇順の個数なので並べ替えない
-function isCountType(q){ return q.q.indexOf("いくつあるか") >= 0; }
-
-function shuffledIndices(){
-  const a = [0,1,2,3,4];
-  for(let i = a.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    const t = a[i]; a[i] = a[j]; a[j] = t;
-  }
-  return a;
-}
-
-// 同じラウンド中は同じ並びを返す（前の問題に戻っても表示がずれない）
-function getPerm(q){
-  if(!drillActive() || isCountType(q)) return [0,1,2,3,4];
-  const key = qKey(q);
-  if(!permMap.has(key)) permMap.set(key, shuffledIndices());
-  return permMap.get(key);
-}
-
-// 解説文中の「アが正解」「イほど〜」のような選択肢ラベルを、今の並び順に合わせて書き換える。
-// 「アンゾフ」「イノベーション」など単語の一部や「ア～オ」の範囲表記は対象外。
-// 一度に置き換えるので「ア→イ→ウ」のような連鎖置換は起きない。
-const LABEL_REF = /(^|[^ァ-ヶー～〜])([アイウエオ])(?![ァ-ヶー～〜])/g;
-function remapLabels(text){
-  if(!text) return text;
-  return text.replace(LABEL_REF, (m, pre, ch)=>{
-    const src = LABELS.indexOf(ch);
-    return pre + LABELS[currentPerm.indexOf(src)];
-  });
-}
-
-function allQuestions(){
-  return ALL_QUESTIONS;
-}
+const currentPerm = [0,1,2,3,4]; // 問題指定では選択肢を並べ替えない
 
 function qKey(q){ return q.year + "-" + q.period + "-" + q.n; }
 
@@ -6159,13 +6070,6 @@ function saveWrongSet(){
   }
 }
 
-function scopeFiltered(list){
-  return list.filter(q =>
-    (yearFilter.has("all") || yearFilter.has(q.year)) &&
-    (termFilter === "all" || q.period === termFilter)
-  );
-}
-
 // ---- 頻出度メタの取得 ----
 function metaOf(q){ return QMETA[qKey(q)] || [1, [q.year], 0]; }
 function repCount(q){ return metaOf(q)[0]; }
@@ -6181,113 +6085,32 @@ function freqBadge(q){
   return '';
 }
 
-// 「頻出」と見なす基準：12年で3回以上出題（頻出3回・超頻出4回）
-function isFreq(q){ return repCount(q) >= 3; }
+const selYear = document.getElementById("selYear");
+const selTerm = document.getElementById("selTerm");
+const selNo = document.getElementById("selNo");
 
-function currentQuestionSet(){
-  // 令和8年度予想モードは年度・期の枠を越えた横断セット
-  if(mode === "r8"){
-    return allQuestions().filter(q => isR8(q));
-  }
-  let base = scopeFiltered(allQuestions());
-  if(mode === "weak"){
-    base = base.filter(q => wrongSet.has(qKey(q)));
-  } else if(mode === "freq"){
-    base = base.filter(q => isFreq(q));
-  }
-  return base;
+function questionsOf(year, period){
+  return ALL_QUESTIONS.filter(q => q.year === year && q.period === period)
+    .sort((a, b) => a.n - b.n);
 }
 
-function updateScopeInfo(){
-  const el = document.getElementById("scopeInfo");
-  if(mode === "r8"){
-    const n = allQuestions().filter(q => isR8(q)).length;
-    el.innerHTML = "出題範囲：令和8年度 予想セット（年度・期の指定は無効）　<b>" + n + "問</b>";
-    return;
-  }
-  const inScope = scopeFiltered(allQuestions());
-  const yLabel = yearFilter.has("all") ? "全年度"
-    : YEAR_ORDER.filter(y => yearFilter.has(y)).map(y => YEAR_LABEL[y]).join("・");
-  const tLabel = termFilter === "all" ? "前期＋後期" : termFilter + "のみ";
-  const freqAll = inScope.filter(q => isFreq(q));
-  if(mode === "freq"){
-    const lv3 = freqAll.filter(q => repCount(q) >= 4).length;
-    el.innerHTML = "出題範囲：" + yLabel + "／" + tLabel + "　<b>頻出のみ " + freqAll.length + "問</b>"
-                 + "（超頻出4回 <b>" + lv3 + "問</b> ＋ 頻出3回 <b>" + (freqAll.length - lv3) + "問</b>）";
-    return;
-  }
-  el.innerHTML = "出題範囲：" + yLabel + "／" + tLabel + "　<b>" + inScope.length + "問</b>"
-               + "（うち頻出 <b>" + freqAll.length + "問</b>）";
+function fillNoOptions(keepN){
+  const qs = questionsOf(selYear.value, selTerm.value);
+  selNo.innerHTML = qs.map(q => '<option value="' + q.n + '">問題 ' + q.n + '</option>').join("");
+  if(qs.some(q => q.n === keepN)) selNo.value = String(keepN);
 }
 
-function reshuffle(){
-  pool = [...currentQuestionSet()].sort(()=>Math.random()-0.5);
+function showSelected(){
+  const n = Number(selNo.value);
+  const q = ALL_QUESTIONS.find(x => x.year === selYear.value && x.period === selTerm.value && x.n === n);
+  if(q) renderQuestion(q);
 }
 
-function updateWeakUI(){
-  const inScope = scopeFiltered(allQuestions());
-  const weakInScope = inScope.filter(q => wrongSet.has(qKey(q))).length;
-  document.getElementById("weakCount").textContent = weakInScope;
-  document.getElementById("modeWeak").disabled = (weakInScope === 0 && mode !== "weak");
-
-  // 頻出（3回以上）は年度・期フィルタに連動して件数が変わる
-  const freqInScope = inScope.filter(q => isFreq(q)).length;
-  document.getElementById("freqCount").textContent = freqInScope;
-  document.getElementById("modeFreq").disabled = (freqInScope === 0 && mode !== "freq");
-
-  document.getElementById("r8Count").textContent = allQuestions().filter(q => isR8(q)).length;
-  // 予想モード中は年度・期ボタンを無効化
-  const lock = (mode === "r8") || drillActive();
-  const dlock = drillActive();
-  if(dlock){
-    // 10問限定モード中はモードの切替を固定する
-    ["modeAll","modeWeak","modeFreq","modeR8"].forEach(id =>
-      document.getElementById(id).disabled = true);
-  } else {
-    // 苦手・頻出はこの関数の前半で件数に応じて設定済み
-    document.getElementById("modeAll").disabled = false;
-    document.getElementById("modeR8").disabled = false;
-  }
-  const db = document.getElementById("drillBtn");
-  if(db) db.disabled = dlock;
-  document.querySelectorAll("#yearBar .period-btn, #termBar .period-btn")
-    .forEach(b => { b.disabled = lock; b.style.opacity = lock ? .35 : 1; });
-  document.getElementById("r8Note").style.display = (mode === "r8") ? "block" : "none";
-}
-
-function renderEmptyWeak(){
-  let msg;
-  if(mode === "freq"){
-    msg = 'この出題範囲には頻出問題（3回以上出題）がありません。<br>年度・期の指定を「全年度／前期＋後期」に戻すか、他の年度をお試しください。';
-  } else {
-    msg = '苦手問題はまだ記録されていません。<br>「全問」モードで問題を解いて、間違えた問題がここに溜まっていきます。';
-  }
-  document.getElementById("cardArea").innerHTML = '<div class="empty-weak">' + msg + '</div>';
-}
-
-function nextQuestion(){
-  const qs = currentQuestionSet();
-  if(qs.length === 0){
-    renderEmptyWeak();
-    return;
-  }
-  if(visitedPos < visited.length - 1){
-    // 戻った状態から「次へ」→ 履歴を前に進む
-    visitedPos++;
-    renderQuestion(visited[visitedPos]);
-    return;
-  }
-  if(pool.length === 0) reshuffle();
-  const q = pool.pop();
-  visited.push(q);
-  visitedPos = visited.length - 1;
-  renderQuestion(q);
-}
-
-function prevQuestion(){
-  if(visitedPos <= 0) return;
-  visitedPos--;
-  renderQuestion(visited[visitedPos]);
+function stepQuestion(d){
+  const i = selNo.selectedIndex + d;
+  if(i < 0 || i >= selNo.options.length) return;
+  selNo.selectedIndex = i;
+  showSelected();
 }
 
 function renderQuestion(q){
@@ -6295,7 +6118,7 @@ function renderQuestion(q){
 
   document.getElementById("cardArea").innerHTML = `
     <div class="qno">
-      <span class="qno-left"><span id="qno">問題 ${current.n}</span><span class="period-tag">${YEAR_LABEL[current.year]} ${current.period}</span>${tierBadge(current)}${freqBadge(current)}${(mode !== "r8" && isR8(current)) ? '<span class="r8-tag">R8予想</span>' : ''}${memoBadge(current)}</span>
+      <span class="qno-left"><span id="qno">問題 ${current.n}</span><span class="period-tag">${YEAR_LABEL[current.year]} ${current.period}</span>${tierBadge(current)}${freqBadge(current)}${isR8(current) ? '<span class="r8-tag">R8予想</span>' : ''}${memoBadge(current)}</span>
       <span class="weak-tag" id="weakTag" style="display:${wrongSet.has(qKey(current)) ? "inline-block" : "none"};">苦手</span>
     </div>
     <div class="qtext" id="qtext"></div>
@@ -6323,7 +6146,6 @@ function renderQuestion(q){
   } else {
     figWrap.classList.remove("show");
   }
-  currentPerm = getPerm(current);
   const optsDiv = document.getElementById("options");
   currentPerm.forEach((srcIdx, i)=>{
     const btn = document.createElement("button");
@@ -6332,22 +6154,17 @@ function renderQuestion(q){
     btn.onclick = ()=> selectAnswer(i);
     optsDiv.appendChild(btn);
   });
-  document.getElementById("nextBtn").onclick = nextQuestion;
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.onclick = ()=> stepQuestion(1);
+  nextBtn.disabled = (selNo.selectedIndex >= selNo.options.length - 1);
   const prevBtn = document.getElementById("prevBtn");
-  prevBtn.onclick = prevQuestion;
-  prevBtn.disabled = (visitedPos <= 0);
+  prevBtn.onclick = ()=> stepQuestion(-1);
+  prevBtn.disabled = (selNo.selectedIndex <= 0);
   document.getElementById("posIndicator").textContent =
-    (visitedPos + 1) + " 問目" + (visitedPos < visited.length - 1 ? "（履歴）" : "");
-
-  // すでに解答済みの問題に戻ってきた場合は解答状態を復元する
-  const prevAns = answeredMap.get(qKey(current));
-  if(prevAns !== undefined) selectAnswer(prevAns, true);
-
-  drillDecorate();   // 10問限定モードのときは操作を差し替える
+    (selNo.selectedIndex + 1) + " / " + selNo.options.length;
 }
 
-// restoring=true のときは履歴から戻った際の再描画。スコアや苦手リストは更新しない
-function selectAnswer(i, restoring){
+function selectAnswer(i){
   const buttons = document.querySelectorAll(".opt");
   buttons.forEach(b=>b.disabled = true);
   const correctPos = currentPerm.indexOf(current.correct);   // 正解が今表示されている位置
@@ -6357,30 +6174,18 @@ function selectAnswer(i, restoring){
     buttons[i].classList.add("wrong");
   }
 
-  if(!restoring){
-    answeredMap.set(qKey(current), i);
-    asked++;
-    if(ok) correctCnt++;
-    document.getElementById("askedCount").textContent = asked;
-    document.getElementById("correctCount").textContent = correctCnt;
+  asked++;
+  if(ok) correctCnt++;
+  document.getElementById("askedCount").textContent = asked;
+  document.getElementById("correctCount").textContent = correctCnt;
 
-    const key = qKey(current);
-    if(ok){
-      wrongSet.delete(key);
-    } else {
-      wrongSet.add(key);
-    }
-    saveWrongSet();
-    updateWeakUI();
-
-    if(drillActive() && drill.marks[drill.idx] === null){
-      drill.marks[drill.idx] = ok;
-      if(!ok) drill.wrong.push(current);
-      drillRenderBar();
-      const nb = document.getElementById("nextBtn");
-      if(nb) nb.disabled = false;
-    }
+  const key = qKey(current);
+  if(ok){
+    wrongSet.delete(key);
+  } else {
+    wrongSet.add(key);
   }
+  saveWrongSet();
 
   document.getElementById("correctLabel").textContent = LABELS[correctPos];
   const verdict = document.getElementById("verdict");
@@ -6388,7 +6193,7 @@ function selectAnswer(i, restoring){
   verdict.className = "verdict " + (ok ? "ok" : "ng");
   let exText = current.ex;
   if(current.note) exText = current.note + "\n" + exText;
-  document.getElementById("explain").innerHTML = linkifyTerms(remapLabels(exText));
+  document.getElementById("explain").innerHTML = linkifyTerms(exText);
   document.getElementById("result").classList.add("show");
 
   const detailList = document.getElementById("detailList");
@@ -6403,7 +6208,7 @@ function selectAnswer(i, restoring){
         <span class="lbl">${LABELS[idx]}</span>
         <span class="tag ${isCorrect ? "ok" : "ng"}">${isCorrect ? "正解の選択肢" : "誤りの選択肢"}</span>
       </div>
-      <div class="detail-text">${linkifyTerms(remapLabels(text))}</div>
+      <div class="detail-text">${linkifyTerms(text)}</div>
     `;
     detailList.appendChild(item);
   });
@@ -6438,70 +6243,6 @@ function renderHistory(){
   el.innerHTML = msg;
 }
 
-function refreshAfterScope(){
-  resetHistory();   // 出題範囲が変わるので履歴をリセット
-  updateWeakUI();
-  updateScopeInfo();
-  reshuffle();
-  nextQuestion();
-}
-
-function switchMode(newMode){
-  mode = newMode;
-  document.getElementById("modeAll").classList.toggle("active", mode === "all");
-  document.getElementById("modeWeak").classList.toggle("active", mode === "weak");
-  document.getElementById("modeFreq").classList.toggle("active", mode === "freq");
-  document.getElementById("modeR8").classList.toggle("active", mode === "r8");
-  resetHistory();   // モードが変わるので履歴をリセット
-  updateWeakUI();
-  updateScopeInfo();
-  reshuffle();
-  nextQuestion();
-}
-
-function switchYear(newYear){
-  if(newYear === "all"){
-    yearFilter = new Set(["all"]);
-  } else {
-    if(yearFilter.has("all")) yearFilter = new Set();
-    if(yearFilter.has(newYear)){
-      yearFilter.delete(newYear);
-      if(yearFilter.size === 0) yearFilter = new Set(["all"]);
-    } else {
-      yearFilter.add(newYear);
-    }
-  }
-  document.querySelectorAll("#yearBar .period-btn").forEach(b =>
-    b.classList.toggle("active", yearFilter.has(b.dataset.year)));
-  refreshAfterScope();
-}
-
-function switchTerm(newTerm){
-  termFilter = newTerm;
-  document.querySelectorAll("#termBar .period-btn").forEach(b =>
-    b.classList.toggle("active", b.dataset.term === termFilter));
-  refreshAfterScope();
-}
-
-document.getElementById("modeAll").onclick = ()=> switchMode("all");
-document.getElementById("modeWeak").onclick = ()=> switchMode("weak");
-document.getElementById("modeFreq").onclick = ()=> switchMode("freq");
-document.getElementById("modeR8").onclick = ()=> switchMode("r8");
-document.querySelectorAll("#yearBar .period-btn").forEach(b =>
-  b.onclick = ()=> switchYear(b.dataset.year));
-document.querySelectorAll("#termBar .period-btn").forEach(b =>
-  b.onclick = ()=> switchTerm(b.dataset.term));
-document.getElementById("resetBtn").onclick = ()=>{
-  if(confirm("苦手問題のリストをすべてリセットします。よろしいですか？")){
-    wrongSet.clear();
-    saveWrongSet();
-    updateWeakUI();
-    if(mode === "weak"){
-      switchMode("all");
-    }
-  }
-};
-
 const THEME_KEY = "soumu_theme";
 
 function applyTheme(theme){
@@ -6526,31 +6267,6 @@ function toggleTheme(){
 
 document.getElementById("themeToggle").onclick = toggleTheme;
 
-// ---- 予想モードの説明文の開閉（状態は端末に保存）----
-const R8NOTE_KEY = "soumu_r8note_open";
-
-function applyR8Note(open){
-  const box = document.getElementById("r8Note");
-  const btn = document.getElementById("r8NoteToggle");
-  box.classList.toggle("open", open);
-  btn.setAttribute("aria-expanded", open ? "true" : "false");
-}
-
-function loadR8Note(){
-  let open = true;                       // 初回は開いた状態
-  try{
-    const v = localStorage.getItem(R8NOTE_KEY);
-    if(v !== null) open = (v === "1");
-  }catch(e){}
-  applyR8Note(open);
-}
-
-document.getElementById("r8NoteToggle").onclick = ()=>{
-  const open = !document.getElementById("r8Note").classList.contains("open");
-  applyR8Note(open);
-  try{ localStorage.setItem(R8NOTE_KEY, open ? "1" : "0"); }catch(e){}
-};
-
 const FLAGNOTE_KEY = "soumu_flagnote_open";
 function applyFlagNote(open){
   const el = document.getElementById("flagNote");
@@ -6570,203 +6286,27 @@ document.getElementById("flagNoteToggle").onclick = ()=>{
 
 // キーボード操作（← → で前後の問題へ）
 document.addEventListener("keydown", e=>{
-  if(e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+  const tag = e.target.tagName;
+  if(tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
   if(glossIsOpen()){
     if(e.key === "Escape") glossClose();
     return;
   }
-  if(drillActive()){
-    if(e.key === "ArrowRight"){
-      const nb = document.getElementById("nextBtn");
-      if(nb && !nb.disabled) nb.click();
-    }
-    return;   // 10問限定モードでは前の問題に戻らない
-  }
-  if(e.key === "ArrowLeft"){ prevQuestion(); }
-  else if(e.key === "ArrowRight"){ nextQuestion(); }
+  if(e.key === "ArrowLeft"){ stepQuestion(-1); }
+  else if(e.key === "ArrowRight"){ stepQuestion(1); }
 });
 
-
-/* ===== 10問限定勉強 =====
-   いまの絞り込み条件から10問を出題し、間違えた問題だけを次のラウンドで
-   繰り返す。全問正解したら完了。 */
-const DRILL_SIZE = 10;
-let drill = null;
-// { size, round, queue[], marks[], wrong[], idx, firstCorrect, log[] }
-
-function drillActive(){ return drill !== null; }
-
-function startDrill(){
-  const qs = currentQuestionSet();
-  if(qs.length === 0){ renderEmptyWeak(); return; }
-  const n = Math.min(DRILL_SIZE, qs.length);
-  const picked = [...qs].sort(()=>Math.random()-0.5).slice(0, n);
-  drill = {
-    size: n, round: 1,
-    original: picked,              // このセッションで出題した元の10問
-    queue: [...picked],
-    marks: new Array(n).fill(null),
-    wrong: [], idx: 0, firstCorrect: 0, log: []
-  };
-  resetHistory();
-  updateWeakUI();
-  drillRenderBar();
-  drillShow();
-}
-
-function quitDrill(){
-  drill = null;
-  document.getElementById("drillBar").style.display = "none";
-  updateWeakUI();
-  resetHistory();
-  reshuffle();
-  nextQuestion();
-}
-
-function drillRenderBar(){
-  const bar = document.getElementById("drillBar");
-  if(!drillActive()){ bar.style.display = "none"; return; }
-  bar.style.display = "block";
-  document.getElementById("drillRound").textContent =
-    "第" + drill.round + "ラウンド　" + drill.queue.length + "問";
-  const dots = document.getElementById("drillDots");
-  dots.innerHTML = "";
-  drill.queue.forEach((q, i)=>{
-    const d = document.createElement("span");
-    let cls = "dot";
-    if(drill.marks[i] === true) cls += " ok";
-    else if(drill.marks[i] === false) cls += " ng";
-    else if(i === drill.idx) cls += " now";
-    d.className = cls;
-    d.textContent = (drill.marks[i] === true) ? "○" : (drill.marks[i] === false) ? "×" : (i + 1);
-    dots.appendChild(d);
-  });
-}
-
-function drillShow(){
-  if(drill.idx >= drill.queue.length){ drillRoundEnd(); return; }
-  const q = drill.queue[drill.idx];
-  visited = [q];
-  visitedPos = 0;
-  drillRenderBar();
-  renderQuestion(q);
-}
-
-function drillAdvance(){
-  drill.idx++;
-  drillShow();
-}
-
-// 出題カードを10問限定モード用に整える（renderQuestion の最後で呼ぶ）
-function drillDecorate(){
-  if(!drillActive()) return;
-  const prev = document.getElementById("prevBtn");
-  if(prev) prev.style.display = "none";
-  const pos = document.getElementById("posIndicator");
-  if(pos) pos.textContent = (drill.idx + 1) + " / " + drill.queue.length + " 問目";
-  const nb = document.getElementById("nextBtn");
-  if(nb){
-    nb.onclick = drillAdvance;
-    nb.textContent = (drill.idx === drill.queue.length - 1) ? "結果を見る" : "次の問題へ";
-    nb.disabled = (drill.marks[drill.idx] === null);   // 解答するまで進めない
-  }
-}
-
-// 1ラウンド終了
-function drillRoundEnd(){
-  const wrongN = drill.wrong.length;
-  const okN = drill.queue.length - wrongN;
-  if(drill.round === 1) drill.firstCorrect = okN;
-  drill.log.push({ round: drill.round, n: drill.queue.length, ok: okN });
-  if(wrongN === 0) drillRenderDone();
-  else drillRenderRound(okN, wrongN);
-}
-
-function drillRenderRound(okN, wrongN){
-  drillRenderBar();
-  const rows = drill.wrong.map(q =>
-    '<div class="r"><span class="id">' + YEAR_LABEL[q.year] + " " + q.period + " 問" + q.n + '</span>'
-    + '<span>' + escHtml(q.q.replace(/\n/g, " ")).slice(0, 90) + '</span></div>').join("");
-  document.getElementById("cardArea").innerHTML =
-    '<div class="drill-result">'
-    + '<h2>第' + drill.round + 'ラウンド　終了</h2>'
-    + '<div class="drill-score">' + okN + '<small>/ ' + drill.queue.length + ' 問正解</small></div>'
-    + '<p class="lead">間違えた <b>' + wrongN + '</b> 問をもう一度解きます。<br>全問正解するまで繰り返します。</p>'
-    + '<div class="drill-list">' + rows + '</div>'
-    + '<div class="drill-actions">'
-    + '<button class="next-btn" id="drillAgain">間違えた ' + wrongN + ' 問をもう一度</button>'
-    + '<button class="mode-btn" id="drillSame">この10問を最初からやり直す</button>'
-    + '<button class="mode-btn" id="drillStop">ここでやめる</button>'
-    + '</div></div>';
-  document.getElementById("drillAgain").onclick = drillNextRound;
-  document.getElementById("drillSame").onclick = drillReplaySame;
-  document.getElementById("drillStop").onclick = quitDrill;
-}
-
-function drillNextRound(){
-  drill.round++;
-  drill.queue = [...drill.wrong].sort(()=>Math.random()-0.5);
-  drill.marks = new Array(drill.queue.length).fill(null);
-  drill.wrong = [];
-  drill.idx = 0;
-  resetHistory();          // 前ラウンドの解答状態を持ち越さない
-  drillShow();
-}
-
-// 同じ10問を第1ラウンドからやり直す（正解・不正解の記録はリセット）
-function drillReplaySame(){
-  drill.round = 1;
-  drill.queue = [...drill.original].sort(()=>Math.random()-0.5);
-  drill.marks = new Array(drill.queue.length).fill(null);
-  drill.wrong = [];
-  drill.idx = 0;
-  drill.firstCorrect = 0;
-  drill.log = [];
-  resetHistory();
-  drillRenderBar();
-  drillShow();
-}
-
-function drillRenderDone(){
-  document.getElementById("drillBar").style.display = "none";
-  const rounds = drill.log.length;
-  const logHtml = drill.log.map(l =>
-    "第" + l.round + "ラウンド " + l.ok + "/" + l.n + "問正解").join("　→　");
-  const rate = Math.round(100 * drill.firstCorrect / drill.size);
-  document.getElementById("cardArea").innerHTML =
-    '<div class="drill-result">'
-    + '<h2 class="done">完了しました</h2>'
-    + '<div class="drill-score">' + drill.size + '<small>問すべて正解</small></div>'
-    + '<p class="lead">' + rounds + 'ラウンドで到達しました。<br>'
-    + '1回目で正解できたのは <b>' + drill.firstCorrect + ' / ' + drill.size + '問</b>（' + rate + '%）です。</p>'
-    + '<div class="drill-log">' + logHtml + '</div>'
-    + '<div class="drill-actions">'
-    + '<button class="next-btn" id="drillSameDone">再度同じ問題を解く</button>'
-    + '<button class="mode-btn" id="drillMore">同じ条件で新しい10問</button>'
-    + '<button class="mode-btn" id="drillEnd">通常モードに戻る</button>'
-    + '</div></div>';
-  document.getElementById("drillSameDone").onclick = drillReplaySame;
-  document.getElementById("drillMore").onclick = startDrill;
-  document.getElementById("drillEnd").onclick = quitDrill;
-}
-
-document.getElementById("drillBtn").onclick = startDrill;
-document.getElementById("drillQuit").onclick = ()=>{
-  if(drill && drill.idx === 0 && drill.round === 1 && drill.marks.every(m => m === null)){
-    quitDrill();
-  } else if(confirm("10問限定勉強をやめて通常モードに戻ります。よろしいですか？")){
-    quitDrill();
-  }
-};
+selYear.onchange = ()=>{ fillNoOptions(Number(selNo.value)); showSelected(); };
+selTerm.onchange = ()=>{ fillNoOptions(Number(selNo.value)); showSelected(); };
+selNo.onchange = showSelected;
 
 (function init(){
   loadTheme();
   loadWrongSet();
-  loadR8Note();
-  updateWeakUI();
-  updateScopeInfo();
-  reshuffle();
-  nextQuestion();
+  selYear.innerHTML = YEAR_ORDER.map(y => '<option value="' + y + '">' + YEAR_LABEL[y] + '</option>').join("");
+  selTerm.innerHTML = ["前期", "後期"].map(t => '<option value="' + t + '">' + t + '</option>').join("");
+  fillNoOptions(1);
+  showSelected();
 })();
 </script>
 </body>
