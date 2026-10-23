@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="経理2級 勉強法">
+<meta name="theme-color" content="#1b1d23">
+<title>経理2級 効率的な勉強法</title>
+<style>
+:root{
+  --bg:#1b1d23; --panel:#24272f; --panel-2:#2a2d36; --border:#3b3f4a;
+  --ink:#eceef3; --dim:#a3a8b5; --faint:#7b8090;
+  --accent:#e0a458; --green:#5fb08f; --red:#d2705f; --req:#7fb8e8;
+  --pos:#79bdf0; --neg:#ff8b73;
+  --serif:"Noto Serif JP","Hiragino Mincho ProN",serif;
+  --sans:"Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+}
+html[data-theme="light"]{
+  --bg:#f3f4f7; --panel:#ffffff; --panel-2:#f8f9fb; --border:#d5d9e2;
+  --ink:#23262d; --dim:#6b7180; --faint:#9095a3;
+  --accent:#9a5d14; --green:#24795e; --red:#b5432f; --req:#275e8f;
+  --pos:#1a5f9e; --neg:#c02617;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--sans); line-height:1.9;
+  padding:0 0 70px;
+  -webkit-tap-highlight-color:transparent;
+}
+.wrap{max-width:820px;margin:0 auto;padding:0 18px;
+  padding-left:calc(18px + env(safe-area-inset-left));
+  padding-right:calc(18px + env(safe-area-inset-right));}
+header{padding:28px 0 6px;position:relative;}
+h1{font-family:var(--serif);font-size:1.35rem;font-weight:700;margin:0;letter-spacing:.02em;line-height:1.6;}
+.sub{font-size:.78rem;color:var(--dim);margin-top:8px;}
+.themebtn{
+  position:absolute;top:28px;right:0;
+  background:none;border:1px solid var(--border);color:var(--dim);
+  border-radius:4px;padding:6px 11px;font-size:.72rem;font-family:var(--sans);cursor:pointer;
+}
+.themebtn:hover{color:var(--ink);border-color:var(--accent);}
+@media (max-width:520px){
+  header{padding-top:54px;}
+  .themebtn{top:16px;}
+}
+
+/* 結論ボックス */
+.lead{
+  margin-top:22px;border:1px solid var(--accent);border-radius:6px;
+  background:var(--panel);padding:16px 18px;
+}
+.lead h2{font-family:var(--serif);font-size:1rem;margin:0 0 8px;color:var(--accent);letter-spacing:.03em;}
+.lead p{margin:0 0 6px;font-size:.86rem;}
+.lead .big{font-size:.95rem;font-weight:700;}
+.lead b{color:var(--accent);}
+
+h2.sec{
+  font-family:var(--serif);font-size:1.05rem;font-weight:700;
+  margin:38px 0 4px;padding-bottom:8px;border-bottom:1px solid var(--border);
+  letter-spacing:.03em;
+}
+h2.sec .num{color:var(--accent);font-size:.8rem;margin-right:8px;letter-spacing:.08em;}
+h3{font-size:.92rem;margin:22px 0 6px;color:var(--ink);font-weight:700;}
+p{font-size:.86rem;margin:8px 0;}
+.note{font-size:.78rem;color:var(--dim);}
+b.hl{color:var(--accent);}
+.neg{color:var(--neg);font-weight:700;}
+.pos{color:var(--pos);font-weight:700;}
+
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.8rem;}
+th,td{padding:7px 9px;border-bottom:1px solid var(--border);text-align:left;}
+th{color:var(--dim);font-weight:600;font-size:.76rem;}
+td.n{text-align:right;font-variant-numeric:tabular-nums;}
+tr.hit td{color:var(--accent);font-weight:700;}
+.scroll{overflow-x:auto;}
+
+.card{
+  border:1px solid var(--border);border-radius:6px;background:var(--panel);
+  padding:14px 16px;margin:14px 0;
+}
+.card h4{margin:0 0 6px;font-size:.88rem;color:var(--accent);font-family:var(--serif);letter-spacing:.02em;}
+.card p{margin:4px 0;font-size:.84rem;}
+
+/* フェーズ */
+.phase{
+  border-left:3px solid var(--req);
+  background:var(--panel);
+  padding:13px 16px;margin:12px 0;border-radius:0 6px 6px 0;
+}
+.phase.p2{border-left-color:var(--accent);}
+.phase.p3{border-left-color:var(--green);}
+.phase.p4{border-left-color:var(--red);}
+.phase .ttl{font-weight:700;font-size:.9rem;margin-bottom:2px;}
+.phase .day{font-size:.74rem;color:var(--faint);letter-spacing:.05em;}
+.phase p{margin:6px 0 0;font-size:.83rem;}
+
+ul,ol{margin:8px 0;padding-left:1.3em;font-size:.85rem;}
+li{margin:5px 0;}
+li b{color:var(--ink);}
+
+.check{list-style:none;padding-left:0;}
+.check li{position:relative;padding-left:1.6em;}
+.check li::before{content:"☐";position:absolute;left:0;color:var(--accent);}
+
+.tagline{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+.tag{
+  font-size:.72rem;padding:2px 10px;border-radius:11px;
+  border:1px solid var(--border);color:var(--dim);white-space:nowrap;
+}
+.tag.s{background:var(--req);border-color:var(--req);color:var(--bg);font-weight:700;}
+.tag.a{border-color:var(--req);color:var(--req);}
+.tag.m{border-color:var(--green);color:var(--green);}
+.tag.f{border-color:var(--accent);color:var(--accent);}
+
+.files{display:grid;gap:10px;margin:14px 0;}
+.file{
+  border:1px solid var(--border);border-radius:6px;background:var(--panel-2);
+  padding:12px 14px;
+}
+.file .nm{font-size:.83rem;font-weight:700;color:var(--accent);font-family:var(--sans);}
+.file p{margin:4px 0 0;font-size:.8rem;color:var(--dim);}
+footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--border);font-size:.74rem;color:var(--faint);}
+
+.back-link{
+  position:absolute; z-index:1000;
+  top:calc(6px + env(safe-area-inset-top)); left:calc(10px + env(safe-area-inset-left));
+  padding:4px 2px; font-size:.72rem; color:inherit; opacity:.65; text-decoration:none;
+  font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+}
+.back-link:hover{ opacity:1; text-decoration:underline; }
+</style>
+</head>
+<body>
+<a class="back-link" href="keiri.html">← 経理2級 トップ</a>
+<div class="wrap">
+
+<header>
+  <button class="themebtn" id="themeBtn">ライト表示</button>
+  <h1>経理 2級 ｜ 効率的な勉強法</h1>
+  <div class="sub">令和元年度〜令和7年度・560問を全文照合して割り出した、令和8年度に向けた学習設計</div>
+</header>
+
+<div class="lead">
+  <h2>結論：やるべき順番は決まっています</h2>
+  <p class="big">① 必修160問（令和5・4年度）→ ② 重要80問（令和3年度）→ ③ 丸暗記可236問 → ④ 苦手だけ回す</p>
+  <p>ビジネス・キャリア検定は<b>3年前・4年前の問題がそのまま、あるいは選択肢を少し変えて再出題される</b>傾向があります。
+  560問を照合したところ、再出題の山は<b>3年後（81件）・4年後（58件）</b>で、直近1〜2年からの再出題（40件）は少数です。</p>
+  <p>したがって<b>令和8年度を受けるなら、令和5年度と令和4年度の問題が最優先</b>。過去問で4〜6割を固め、残りは出題の多い分野の理解で取りにいく、という二段構えが必要です。</p>
+</div>
+
+<h2 class="sec"><span class="num">01</span>データで見る出題の規則性</h2>
+<p>「その年度だけを覚えていたら、本番の40問のうち何問が既知だったか」を過去問で実際に検証した結果です。</p>
+<div class="scroll">
+<table>
+  <tr><th>覚える範囲</th><th>令和7年度</th><th>令和6年度</th><th>令和5年度</th><th>令和4年度</th></tr>
+  <tr><td>直近1〜2年だけ</td><td class="n">2%</td><td class="n">8%</td><td class="n">8%</td><td class="n">9%</td></tr>
+  <tr><td>3年前だけ</td><td class="n">25%</td><td class="n">29%</td><td class="n">22%</td><td class="n">22%</td></tr>
+  <tr class="hit"><td>3年前＋4年前（＝必修）</td><td class="n">42%</td><td class="n">48%</td><td class="n">49%</td><td class="n">—</td></tr>
+  <tr><td>＋5年前（＝重要）</td><td class="n">57%</td><td class="n">62%</td><td class="n">—</td><td class="n">—</td></tr>
+</table>
+</div>
+<p class="note">※「既知」＝問題文・選択肢が同一、または大部分が一致する類題が存在した問題。合格基準は40問中24問＝60%です。「—」は比較できる過去の年度がないもの。</p>
+<p><b class="hl">読み方</b>：必修（3年前＋4年前）で42〜49%、重要（5年前）まで広げると57%（令和7年度）・62%（令和6年度）です。</p>
+
+<h2 class="sec"><span class="num">02</span>4つのフラグの意味</h2>
+<div class="tagline">
+  <span class="tag s">必修</span><span class="tag a">重要</span><span class="tag m">丸暗記可</span><span class="tag f">頻出 3回</span>
+</div>
+<div class="phase">
+  <div class="ttl">必修（160問）</div>
+  <div class="day">令和5年度・令和4年度</div>
+  <p>受験年から見て3年前・4年前。再出題が集中する層で、最優先で潰します。</p>
+</div>
+<div class="phase p2">
+  <div class="ttl">重要（80問）</div>
+  <div class="day">令和3年度</div>
+  <p>5年前。必修の次に再出題が多い「保険層」です。</p>
+</div>
+<div class="phase p3">
+  <div class="ttl">丸暗記可（236問）</div>
+  <div class="day">全年度から抽出</div>
+  <p><b>5肢すべてが同一のまま再出題された実績</b>がある問題。答えを覚えれば確実に得点できます。直前期の得点源。</p>
+</div>
+<div class="phase p4">
+  <div class="ttl">頻出（3回以上出題）</div>
+  <div class="day">7年間での出題回数</div>
+  <p>「この論点は試験の主題」というサイン。令和5〜7年度に再出題された割合は、過去2回以上出た問題10%・1回だけの問題16%でした。テキストで周辺知識ごと固める合図に使ってください。</p>
+</div>
+
+<h2 class="sec"><span class="num">03</span>学習プラン（標準6週間）</h2>
+<p>1日20問ペースを標準とします。1問あたり解答30秒＋確認1分で、<b>1日30〜40分</b>が目安です。</p>
+<div class="scroll">
+<table>
+  <tr><th>週</th><th>やること</th><th>分量</th><th>ゴール</th></tr>
+  <tr><td>第1〜2週</td><td>必修160問を1周（令和5年度→令和4年度）</td><td class="n">1日20問</td><td>×印を付けながら通す</td></tr>
+  <tr><td>第3週</td><td>必修の2周目＝間違えた問題のみ</td><td class="n">1日30問</td><td>正答率8割</td></tr>
+  <tr><td>第4週</td><td>重要80問を1周＋上位分野をテキストで確認</td><td class="n">1日20問</td><td>×を洗い出す</td></tr>
+  <tr><td>第5週</td><td>丸暗記可236問＋頻出論点の確認</td><td class="n">1日25問</td><td>答えを即答できる</td></tr>
+  <tr><td>第6週</td><td>苦手問題のみ／令和8年度予想120問で仕上げ</td><td class="n">1日40問</td><td>本番形式で6割超</td></tr>
+</table>
+</div>
+<p class="note">※時間が取れない場合は、第1〜3週（必修）と第5週（丸暗記可）だけでも実施してください。この2つが得点効率の高い部分です。</p>
+
+<h2 class="sec"><span class="num">04</span>解き方のコツ（出題形式の統計）</h2>
+<div class="card">
+  <h4>「誤り・不適切なものを選べ」が全体の約4割</h4>
+  <p>560問の内訳は <span class="neg">誤り・不適切を選べ＝215問（38%）</span>／<span class="pos">正しい・適切を選べ＝279問（50%）</span>／組合せ30問／個数0問／その他36問。</p>
+  <p><b>設問の最後をまず読み、「誤り・不適切」か「正しい・適切」かに印を付けてから選択肢に入る</b>だけで取りこぼしが減ります。アプリ・正解一覧では、この判定語を色分けして表示しています。</p>
+</div>
+<div class="card">
+  <h4>誤り選択肢は「作り方」が決まっている</h4>
+  <p>過去問を通すと、誤りの型は次のパターンにほぼ集約されます。</p>
+  <ul>
+    <li><b>数値・期限のすり替え</b>：株式交付費の償却3年以内、有価証券報告書の提出3カ月以内、届出書の効力発生15日、設立届出2カ月以内、青色申請の期限、縦覧5年など</li>
+    <li><b>主体・区分の入れ替え</b>：監査役と会計監査人と会計参与の権限・任期、評価性引当金と負債性引当金、営業・投資・財務キャッシュ・フローの区分</li>
+    <li><b>原則と例外の逆転</b>：「常に」「必ず」「すべて」で、重要性の原則による簡便処理、収益認識の例外、法人税の評価損の要件などの例外を消した選択肢</li>
+    <li><b>会計と税務の混同</b>：会計上は認められても税務上は損金不算入（交際費・寄附金・評価損・引当金）となる処理</li>
+    <li><b>計算の落とし穴</b>：1年基準の判定日、期中取得の月割り・日割り、償却原価法の利息法と定額法、未実現利益のアップストリーム按分</li>
+  </ul>
+</div>
+<div class="card">
+  <h4>正解記号の偏り（参考）</h4>
+  <p>ア106／イ104／ウ125／エ111／オ114。<b>ウがやや多く、イが最少</b>です。まったく分からない問題で当てずっぽうを選ぶ場合の最後の判断材料程度に。</p>
+</div>
+
+<h2 class="sec"><span class="num">05</span>分野別の重み（1回40問あたりの目安）</h2>
+<p>560問を設問の主題で自動分類した内訳です（分類できなかった問題12問を除く）。時間配分の目安に使ってください。</p>
+<div class="scroll">
+<table>
+  <tr><th>分野</th><th>7年計</th><th>構成比</th><th>1回あたり</th></tr>
+  <tr class="hit"><td>資産・負債・純資産の会計</td><td class="n">130問</td><td class="n">23.2%</td><td class="n">約9.3問</td></tr>
+  <tr class="hit"><td>会社法会計・機関</td><td class="n">104問</td><td class="n">18.6%</td><td class="n">約7.4問</td></tr>
+  <tr class="hit"><td>金融商品取引法・開示・監査</td><td class="n">95問</td><td class="n">17.0%</td><td class="n">約6.8問</td></tr>
+  <tr><td>税務会計（法人税等）</td><td class="n">95問</td><td class="n">17.0%</td><td class="n">約6.8問</td></tr>
+  <tr><td>会計理論・損益計算</td><td class="n">70問</td><td class="n">12.5%</td><td class="n">約5.0問</td></tr>
+  <tr><td>連結会計・外貨換算</td><td class="n">39問</td><td class="n">7.0%</td><td class="n">約2.8問</td></tr>
+  <tr><td>キャッシュ・フロー計算書</td><td class="n">15問</td><td class="n">2.7%</td><td class="n">約1.1問</td></tr>
+</table>
+</div>
+<p><b class="hl">上位3分野（資産・負債・純資産の会計・会社法会計・機関・金融商品取引法・開示・監査）で全体の59%</b>を占めます。経理2級は税務会計と会社法・金融商品取引法の制度問題の比率が高く、計算問題は同じ型（流動資産合計・償却額・分配可能額・繰越欠損金など）が繰り返し出題されています。</p>
+
+<h2 class="sec"><span class="num">06</span>教材の使い分け</h2>
+<div class="files">
+  <div class="file">
+    <div class="nm">一問一答アプリ</div>
+    <p>メインの学習ツール。年度・期で絞り、必修→重要の順に解きます。間違えた問題は自動で「苦手問題」に記録されるので、2周目は苦手モードだけを回してください。解答後に総括解説と選択肢ごとの解説（「より詳しい解説」）、下線の付いた用語の解説を読めます。</p>
+  </div>
+  <div class="file">
+    <div class="nm">正解一覧</div>
+    <p>「問題文 → 選ぶべき選択肢」だけを並べた確認用。通勤中の流し読みや、直前の総復習向き。丸暗記可フィルタで236問だけを一覧できます。検索窓に用語を入れると、その論点の問題を横断で確認できます。</p>
+  </div>
+  <div class="file">
+    <div class="nm">問題指定</div>
+    <p>年度・前期／後期・問題番号を指定して1問を解く画面。テキストや講義で出てきた過去問をピンポイントで確認したいときに。</p>
+  </div>
+  <div class="file">
+    <div class="nm">令和8年度 予想モード（アプリ内）</div>
+    <p>3年前・4年前の出題傾向から抽出した120問。直前1週間の総仕上げに、本番と同じ40問区切りで解いてください。</p>
+  </div>
+</div>
+
+<h2 class="sec"><span class="num">07</span>1日の進め方（テンプレート）</h2>
+<ol>
+  <li><b>解く（10分）</b>：20問を年度順に。迷った問題は選択肢を絞った理由を頭の中で言語化する。</li>
+  <li><b>確認する（15分）</b>：間違えた問題は解説を読み、テキストで該当論点を確認する。<b>他の4肢がなぜ正しい（誤り）のか</b>まで確認するのがポイント（他の年度でその肢が正解肢になることがあるため）。</li>
+  <li><b>広げる（5分）</b>：正解一覧の検索窓にその論点の用語を入れ、同じ論点の過去問を横断で見る。</li>
+  <li><b>記録する（1分）</b>：その日に3回以上出てきた論点をメモ1行。翌日の最初に見返す。</li>
+</ol>
+
+<h2 class="sec"><span class="num">08</span>直前1週間チェックリスト</h2>
+<ul class="check">
+  <li>令和8年度 予想モード120問を、40問ずつ区切って通した</li>
+  <li>丸暗記可236問を答えごと即答できる</li>
+  <li>苦手問題リストが20問以下になっている</li>
+    <li>流動資産合計・償却額・分配可能額・繰越欠損金・交際費・貸倒引当金限度額の計算パターンを各1問ずつ解き直した</li>
+    <li>監査役・監査役会・会計監査人・会計参与・指名委員会等・監査等委員会の任期・人数・決議要件を表で言える</li>
+    <li>有価証券届出書・目論見書・有価証券報告書・半期報告書・臨時報告書・内部統制報告書の区別と提出期限を確認した</li>
+    <li>収益認識の5ステップ、減損会計の3段階、連結の相殺消去の基本仕訳を説明できる</li>
+  <li>「誤り・不適切を選べ」が約4割であることを意識して、設問末尾を先に読む練習をした</li>
+</ul>
+
+<footer>
+  数値はいずれも、令和元年度〜令和7年度の公開問題（560問）を全文照合して算出したものです。
+  再出題の判定・分野の分類は、問題文と選択肢の一致度やキーワードによる自動判定のため、若干の誤差を含みます。
+</footer>
+
+</div>
+<script>
+const TK="keiri_theme";
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme",t);
+  document.getElementById("themeBtn").textContent = (t==="light") ? "ダーク表示" : "ライト表示";
+  document.querySelector('meta[name="theme-color"]').setAttribute("content", t==="light" ? "#f3f4f7" : "#1b1d23");
+}
+let theme="dark";
+try{ theme = localStorage.getItem(TK) || "dark"; }catch(e){}
+applyTheme(theme);
+document.getElementById("themeBtn").onclick=()=>{
+  theme = (theme==="light") ? "dark" : "light";
+  applyTheme(theme);
+  try{ localStorage.setItem(TK,theme); }catch(e){}
+};
+</script>
+</body>
+</html>

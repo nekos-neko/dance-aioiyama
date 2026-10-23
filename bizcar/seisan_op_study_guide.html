@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="生産管理オペレーション2級 勉強法">
+<meta name="theme-color" content="#1b1d23">
+<title>生産管理オペレーション2級 効率的な勉強法</title>
+<style>
+:root{
+  --bg:#1b1d23; --panel:#24272f; --panel-2:#2a2d36; --border:#3b3f4a;
+  --ink:#eceef3; --dim:#a3a8b5; --faint:#7b8090;
+  --accent:#a5c55e; --green:#5fb08f; --red:#d2705f; --req:#7fb8e8;
+  --pos:#79bdf0; --neg:#ff8b73;
+  --serif:"Noto Serif JP","Hiragino Mincho ProN",serif;
+  --sans:"Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+}
+html[data-theme="light"]{
+  --bg:#f3f4f7; --panel:#ffffff; --panel-2:#f8f9fb; --border:#d5d9e2;
+  --ink:#23262d; --dim:#6b7180; --faint:#9095a3;
+  --accent:#55701f; --green:#24795e; --red:#b5432f; --req:#275e8f;
+  --pos:#1a5f9e; --neg:#c02617;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--sans); line-height:1.9;
+  padding:0 0 70px;
+  -webkit-tap-highlight-color:transparent;
+}
+.wrap{max-width:820px;margin:0 auto;padding:0 18px;
+  padding-left:calc(18px + env(safe-area-inset-left));
+  padding-right:calc(18px + env(safe-area-inset-right));}
+header{padding:28px 0 6px;position:relative;}
+h1{font-family:var(--serif);font-size:1.35rem;font-weight:700;margin:0;letter-spacing:.02em;line-height:1.6;}
+.sub{font-size:.78rem;color:var(--dim);margin-top:8px;}
+.themebtn{
+  position:absolute;top:28px;right:0;
+  background:none;border:1px solid var(--border);color:var(--dim);
+  border-radius:4px;padding:6px 11px;font-size:.72rem;font-family:var(--sans);cursor:pointer;
+}
+.themebtn:hover{color:var(--ink);border-color:var(--accent);}
+@media (max-width:520px){
+  header{padding-top:54px;}
+  .themebtn{top:16px;}
+}
+
+/* 結論ボックス */
+.lead{
+  margin-top:22px;border:1px solid var(--accent);border-radius:6px;
+  background:var(--panel);padding:16px 18px;
+}
+.lead h2{font-family:var(--serif);font-size:1rem;margin:0 0 8px;color:var(--accent);letter-spacing:.03em;}
+.lead p{margin:0 0 6px;font-size:.86rem;}
+.lead .big{font-size:.95rem;font-weight:700;}
+.lead b{color:var(--accent);}
+
+h2.sec{
+  font-family:var(--serif);font-size:1.05rem;font-weight:700;
+  margin:38px 0 4px;padding-bottom:8px;border-bottom:1px solid var(--border);
+  letter-spacing:.03em;
+}
+h2.sec .num{color:var(--accent);font-size:.8rem;margin-right:8px;letter-spacing:.08em;}
+h3{font-size:.92rem;margin:22px 0 6px;color:var(--ink);font-weight:700;}
+p{font-size:.86rem;margin:8px 0;}
+.note{font-size:.78rem;color:var(--dim);}
+b.hl{color:var(--accent);}
+.neg{color:var(--neg);font-weight:700;}
+.pos{color:var(--pos);font-weight:700;}
+
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.8rem;}
+th,td{padding:7px 9px;border-bottom:1px solid var(--border);text-align:left;}
+th{color:var(--dim);font-weight:600;font-size:.76rem;}
+td.n{text-align:right;font-variant-numeric:tabular-nums;}
+tr.hit td{color:var(--accent);font-weight:700;}
+.scroll{overflow-x:auto;}
+
+.card{
+  border:1px solid var(--border);border-radius:6px;background:var(--panel);
+  padding:14px 16px;margin:14px 0;
+}
+.card h4{margin:0 0 6px;font-size:.88rem;color:var(--accent);font-family:var(--serif);letter-spacing:.02em;}
+.card p{margin:4px 0;font-size:.84rem;}
+
+/* フェーズ */
+.phase{
+  border-left:3px solid var(--req);
+  background:var(--panel);
+  padding:13px 16px;margin:12px 0;border-radius:0 6px 6px 0;
+}
+.phase.p2{border-left-color:var(--accent);}
+.phase.p3{border-left-color:var(--green);}
+.phase.p4{border-left-color:var(--red);}
+.phase .ttl{font-weight:700;font-size:.9rem;margin-bottom:2px;}
+.phase .day{font-size:.74rem;color:var(--faint);letter-spacing:.05em;}
+.phase p{margin:6px 0 0;font-size:.83rem;}
+
+ul,ol{margin:8px 0;padding-left:1.3em;font-size:.85rem;}
+li{margin:5px 0;}
+li b{color:var(--ink);}
+
+.check{list-style:none;padding-left:0;}
+.check li{position:relative;padding-left:1.6em;}
+.check li::before{content:"☐";position:absolute;left:0;color:var(--accent);}
+
+.tagline{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+.tag{
+  font-size:.72rem;padding:2px 10px;border-radius:11px;
+  border:1px solid var(--border);color:var(--dim);white-space:nowrap;
+}
+.tag.s{background:var(--req);border-color:var(--req);color:var(--bg);font-weight:700;}
+.tag.a{border-color:var(--req);color:var(--req);}
+.tag.m{border-color:var(--green);color:var(--green);}
+.tag.f{border-color:var(--accent);color:var(--accent);}
+
+.files{display:grid;gap:10px;margin:14px 0;}
+.file{
+  border:1px solid var(--border);border-radius:6px;background:var(--panel-2);
+  padding:12px 14px;
+}
+.file .nm{font-size:.83rem;font-weight:700;color:var(--accent);font-family:var(--sans);}
+.file p{margin:4px 0 0;font-size:.8rem;color:var(--dim);}
+footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--border);font-size:.74rem;color:var(--faint);}
+
+.back-link{
+  position:absolute; z-index:1000;
+  top:calc(6px + env(safe-area-inset-top)); left:calc(10px + env(safe-area-inset-left));
+  padding:4px 2px; font-size:.72rem; color:inherit; opacity:.65; text-decoration:none;
+  font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+}
+.back-link:hover{ opacity:1; text-decoration:underline; }
+</style>
+</head>
+<body>
+<a class="back-link" href="seisan_op.html">← 生産管理オペレーション2級 トップ</a>
+<div class="wrap">
+
+<header>
+  <button class="themebtn" id="themeBtn">ライト表示</button>
+  <h1>生産管理オペレーション 2級 ｜ 効率的な勉強法</h1>
+  <div class="sub">令和元年度〜令和7年度・880問を全文照合して割り出した、令和8年度に向けた学習設計</div>
+</header>
+
+<div class="lead">
+  <h2>結論：やるべき順番は決まっています</h2>
+  <p class="big">① 必修240問（令和5・4年度）→ ② 重要160問（令和3年度）→ ③ 丸暗記可122問 → ④ 苦手だけ回す</p>
+  <p>ビジネス・キャリア検定は<b>3年前・4年前の問題がそのまま、あるいは選択肢を少し変えて再出題される</b>傾向があります。
+  880問を照合したところ、再出題の山は<b>3年後（186件）・4年後（70件）</b>で、直近1〜2年からの再出題（67件）は少数です。</p>
+  <p>したがって<b>令和8年度を受けるなら、令和5年度と令和4年度の問題が最優先</b>。再出題だけで合格ライン近くまで届く年がある区分です。必修を確実に仕上げることが最短ルートです。</p>
+</div>
+<p class="note">※令和元〜4年度は旧区分（作業管理等・購買管理等）として別々に実施されていたため、この年度の問題数は他の年度より多くなっています。令和5年度以降は生産管理オペレーションとして1つの試験です。旧区分の問題も論点は共通するため、必修・重要の範囲に含めています。</p>
+<h2 class="sec"><span class="num">01</span>データで見る出題の規則性</h2>
+<p>「その年度だけを覚えていたら、本番の40問のうち何問が既知だったか」を過去問で実際に検証した結果です。</p>
+<div class="scroll">
+<table>
+  <tr><th>覚える範囲</th><th>令和7年度</th><th>令和6年度</th><th>令和5年度</th><th>令和4年度</th></tr>
+  <tr><td>直近1〜2年だけ</td><td class="n">14%</td><td class="n">11%</td><td class="n">8%</td><td class="n">7%</td></tr>
+  <tr><td>3年前だけ</td><td class="n">34%</td><td class="n">30%</td><td class="n">45%</td><td class="n">35%</td></tr>
+  <tr class="hit"><td>3年前＋4年前（＝必修）</td><td class="n">55%</td><td class="n">51%</td><td class="n">62%</td><td class="n">—</td></tr>
+  <tr><td>＋5年前（＝重要）</td><td class="n">61%</td><td class="n">64%</td><td class="n">—</td><td class="n">—</td></tr>
+</table>
+</div>
+<p class="note">※「既知」＝問題文・選択肢が同一、または大部分が一致する類題が存在した問題。合格基準は40問中24問＝60%です。「—」は比較できる過去の年度がないもの。</p>
+<p><b class="hl">読み方</b>：必修（3年前＋4年前）で51〜62%、重要（5年前）まで広げると61%（令和7年度）・64%（令和6年度）です。</p>
+
+<h2 class="sec"><span class="num">02</span>4つのフラグの意味</h2>
+<div class="tagline">
+  <span class="tag s">必修</span><span class="tag a">重要</span><span class="tag m">丸暗記可</span><span class="tag f">頻出 3回</span>
+</div>
+<div class="phase">
+  <div class="ttl">必修（240問）</div>
+  <div class="day">令和5年度・令和4年度</div>
+  <p>受験年から見て3年前・4年前。再出題が集中する層で、最優先で潰します。</p>
+</div>
+<div class="phase p2">
+  <div class="ttl">重要（160問）</div>
+  <div class="day">令和3年度</div>
+  <p>5年前。必修の次に再出題が多い「保険層」です。</p>
+</div>
+<div class="phase p3">
+  <div class="ttl">丸暗記可（122問）</div>
+  <div class="day">全年度から抽出</div>
+  <p><b>5肢すべてが同一のまま再出題された実績</b>がある問題。答えを覚えれば確実に得点できます。直前期の得点源。</p>
+</div>
+<div class="phase p4">
+  <div class="ttl">頻出（3回以上出題）</div>
+  <div class="day">7年間での出題回数</div>
+  <p>「この論点は試験の主題」というサイン。令和5〜7年度に再出題された割合は、過去2回以上出た問題13%・1回だけの問題10%でした。テキストで周辺知識ごと固める合図に使ってください。</p>
+</div>
+
+<h2 class="sec"><span class="num">03</span>学習プラン（標準6週間）</h2>
+<p>1日20問ペースを標準とします。1問あたり解答30秒＋確認1分で、<b>1日30〜40分</b>が目安です。</p>
+<div class="scroll">
+<table>
+  <tr><th>週</th><th>やること</th><th>分量</th><th>ゴール</th></tr>
+  <tr><td>第1〜2週</td><td>必修240問を1周（令和5年度→令和4年度）</td><td class="n">1日20問</td><td>×印を付けながら通す</td></tr>
+  <tr><td>第3週</td><td>必修の2周目＝間違えた問題のみ</td><td class="n">1日30問</td><td>正答率8割</td></tr>
+  <tr><td>第4週</td><td>重要160問を1周＋上位分野をテキストで確認</td><td class="n">1日20問</td><td>×を洗い出す</td></tr>
+  <tr><td>第5週</td><td>丸暗記可122問＋頻出論点の確認</td><td class="n">1日25問</td><td>答えを即答できる</td></tr>
+  <tr><td>第6週</td><td>苦手問題のみ／令和8年度予想120問で仕上げ</td><td class="n">1日40問</td><td>本番形式で6割超</td></tr>
+</table>
+</div>
+<p class="note">※時間が取れない場合は、第1〜3週（必修）と第5週（丸暗記可）だけでも実施してください。この2つが得点効率の高い部分です。</p>
+
+<h2 class="sec"><span class="num">04</span>解き方のコツ（出題形式の統計）</h2>
+<div class="card">
+  <h4>「誤り・不適切なものを選べ」が全体の約6割</h4>
+  <p>880問の内訳は <span class="neg">誤り・不適切を選べ＝527問（60%）</span>／<span class="pos">正しい・適切を選べ＝221問（25%）</span>／組合せ102問／個数0問／その他30問。</p>
+  <p><b>設問の最後をまず読み、「誤り・不適切」か「正しい・適切」かに印を付けてから選択肢に入る</b>だけで取りこぼしが減ります。アプリ・正解一覧では、この判定語を色分けして表示しています。</p>
+</div>
+<div class="card">
+  <h4>誤り選択肢は「作り方」が決まっている</h4>
+  <p>過去問を通すと、誤りの型は次のパターンにほぼ集約されます。</p>
+  <ul>
+    <li><b>似た用語</b>：フールプルーフ（誤操作）とフェールセーフ（故障）、予知警報と発生警報、集中保全と部門保全、外段取と内段取、保全性と保全度</li>
+    <li><b>順序と方向</b>：フォワード法は着手日から（稼働率向上）、バックワード法は納期から（納期順守）、ボトルネックの「前」に仕掛品がたまる、ＭＲＰはプッシュ・かんばんはプル</li>
+    <li><b>計算の定番</b>：負荷工数＝標準時間×生産量÷適合品率、能力＝実働時間×稼働率×人数、総合能率＝工数稼働率×作業効率、ＭＴＢＦ＝1÷故障率、経済的発注量＝√（2Rｃ÷ｈ）、正規分布±2σ＝95.4％</li>
+    <li><b>原価の段階</b>：原価企画はＶＥ、原価改善はＩＥ、原価維持は標準原価計算。標準消費量には通常の減損・仕損を含める</li>
+    <li><b>数字の定番</b>：総括安全衛生管理者は製造業300人以上、衛生管理者・産業医は50人以上、特別教育の記録は3年、海外派遣は6か月以上、度数率は100万時間当たり</li>
+  </ul>
+</div>
+<div class="card">
+  <h4>正解記号の偏り（参考）</h4>
+  <p>ア147／イ167／ウ186／エ192／オ188。<b>エがやや多く、アが最少</b>です。まったく分からない問題で当てずっぽうを選ぶ場合の最後の判断材料程度に。</p>
+</div>
+
+<h2 class="sec"><span class="num">05</span>分野別の重み（1回40問あたりの目安）</h2>
+<p>880問を設問の主題で自動分類した内訳です（分類できなかった問題9問を除く）。時間配分の目安に使ってください。</p>
+<div class="scroll">
+<table>
+  <tr><th>分野</th><th>7年計</th><th>構成比</th><th>1回あたり</th></tr>
+  <tr class="hit"><td>品質管理</td><td class="n">116問</td><td class="n">13.2%</td><td class="n">約5.3問</td></tr>
+  <tr class="hit"><td>安全衛生・環境</td><td class="n">112問</td><td class="n">12.7%</td><td class="n">約5.1問</td></tr>
+  <tr class="hit"><td>物流</td><td class="n">99問</td><td class="n">11.2%</td><td class="n">約4.5問</td></tr>
+  <tr><td>資材・購買・外注</td><td class="n">94問</td><td class="n">10.7%</td><td class="n">約4.3問</td></tr>
+  <tr><td>工程管理・生産方式</td><td class="n">86問</td><td class="n">9.8%</td><td class="n">約3.9問</td></tr>
+  <tr><td>原価管理</td><td class="n">80問</td><td class="n">9.1%</td><td class="n">約3.6問</td></tr>
+  <tr><td>設備管理</td><td class="n">76問</td><td class="n">8.6%</td><td class="n">約3.5問</td></tr>
+  <tr><td>進捗・仕掛・納期</td><td class="n">76問</td><td class="n">8.6%</td><td class="n">約3.5問</td></tr>
+  <tr><td>改善・能率・評価</td><td class="n">68問</td><td class="n">7.7%</td><td class="n">約3.1問</td></tr>
+  <tr><td>作業管理</td><td class="n">64問</td><td class="n">7.3%</td><td class="n">約2.9問</td></tr>
+</table>
+</div>
+<p><b class="hl">上位3分野（品質管理・安全衛生・環境・物流）で全体の37%</b>を占めます。生産管理オペレーション2級は、作業管理（作業標準・標準時間・改善・能率管理）、工程管理（日程計画・工数計画・ＭＲＰ・かんばん・生産統制）、設備管理と経済性工学、品質管理、原価管理、資材・購買・外注管理、物流、安全衛生・環境まで、現場運営の実務知識が幅広く問われます。令和4年度以前は作業管理等・購買管理等の2区分に分かれていましたが、共通問題が多く、同じテーマが繰り返し出題されます。</p>
+
+<h2 class="sec"><span class="num">06</span>教材の使い分け</h2>
+<div class="files">
+  <div class="file">
+    <div class="nm">一問一答アプリ</div>
+    <p>メインの学習ツール。年度・期で絞り、必修→重要の順に解きます。間違えた問題は自動で「苦手問題」に記録されるので、2周目は苦手モードだけを回してください。解答後に総括解説と選択肢ごとの解説（「より詳しい解説」）、下線の付いた用語の解説を読めます。</p>
+  </div>
+  <div class="file">
+    <div class="nm">正解一覧</div>
+    <p>「問題文 → 選ぶべき選択肢」だけを並べた確認用。通勤中の流し読みや、直前の総復習向き。丸暗記可フィルタで122問だけを一覧できます。検索窓に用語を入れると、その論点の問題を横断で確認できます。</p>
+  </div>
+  <div class="file">
+    <div class="nm">問題指定</div>
+    <p>年度・前期／後期・問題番号を指定して1問を解く画面。テキストや講義で出てきた過去問をピンポイントで確認したいときに。</p>
+  </div>
+  <div class="file">
+    <div class="nm">令和8年度 予想モード（アプリ内）</div>
+    <p>3年前・4年前の出題傾向から抽出した120問。直前1週間の総仕上げに、本番と同じ40問区切りで解いてください。</p>
+  </div>
+</div>
+
+<h2 class="sec"><span class="num">07</span>1日の進め方（テンプレート）</h2>
+<ol>
+  <li><b>解く（10分）</b>：20問を年度順に。迷った問題は選択肢を絞った理由を頭の中で言語化する。</li>
+  <li><b>確認する（15分）</b>：間違えた問題は解説を読み、テキストで該当論点を確認する。<b>他の4肢がなぜ正しい（誤り）のか</b>まで確認するのがポイント（他の年度でその肢が正解肢になることがあるため）。</li>
+  <li><b>広げる（5分）</b>：正解一覧の検索窓にその論点の用語を入れ、同じ論点の過去問を横断で見る。</li>
+  <li><b>記録する（1分）</b>：その日に3回以上出てきた論点をメモ1行。翌日の最初に見返す。</li>
+</ol>
+
+<h2 class="sec"><span class="num">08</span>直前1週間チェックリスト</h2>
+<ul class="check">
+  <li>令和8年度 予想モード120問を、40問ずつ区切って通した</li>
+  <li>丸暗記可122問を答えごと即答できる</li>
+  <li>苦手問題リストが20問以下になっている</li>
+    <li>作業標準・標準時間（余裕の種類、直接・間接測定法、レイティングの要否）と、改善のアプローチ・ＥＣＲＳ・3Ｓを整理した</li>
+    <li>日程計画（大・中・小）、工数計画と余力管理、ＭＲＰとかんばん方式、生産管理方式（製番・追番・流動）の違いを説明できる</li>
+    <li>保全方式、ＭＴＢＦ・ＭＴＴＲ・アベイラビリティ・信頼度の計算と、経済性工学の係数の関係を覚えた</li>
+    <li>管理図・抜取検査、原価企画・標準原価差異、定量／定期発注と経済的発注量、物流拠点と安全衛生の数字を確認した</li>
+  <li>「誤り・不適切を選べ」が約6割であることを意識して、設問末尾を先に読む練習をした</li>
+</ul>
+
+<footer>
+  数値はいずれも、令和元年度〜令和7年度の公開問題（880問）を全文照合して算出したものです。
+  再出題の判定・分野の分類は、問題文と選択肢の一致度やキーワードによる自動判定のため、若干の誤差を含みます。
+</footer>
+
+</div>
+<script>
+const TK="seisan_op_theme";
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme",t);
+  document.getElementById("themeBtn").textContent = (t==="light") ? "ダーク表示" : "ライト表示";
+  document.querySelector('meta[name="theme-color"]').setAttribute("content", t==="light" ? "#f3f4f7" : "#1b1d23");
+}
+let theme="dark";
+try{ theme = localStorage.getItem(TK) || "dark"; }catch(e){}
+applyTheme(theme);
+document.getElementById("themeBtn").onclick=()=>{
+  theme = (theme==="light") ? "dark" : "light";
+  applyTheme(theme);
+  try{ localStorage.setItem(TK,theme); }catch(e){}
+};
+</script>
+</body>
+</html>

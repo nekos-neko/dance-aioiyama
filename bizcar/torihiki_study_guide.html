@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="企業法務（取引法務）2級 勉強法">
+<meta name="theme-color" content="#1b1d23">
+<title>企業法務（取引法務）2級 効率的な勉強法</title>
+<style>
+:root{
+  --bg:#1b1d23; --panel:#24272f; --panel-2:#2a2d36; --border:#3b3f4a;
+  --ink:#eceef3; --dim:#a3a8b5; --faint:#7b8090;
+  --accent:#5fc0e0; --green:#5fb08f; --red:#d2705f; --req:#7fb8e8;
+  --pos:#79bdf0; --neg:#ff8b73;
+  --serif:"Noto Serif JP","Hiragino Mincho ProN",serif;
+  --sans:"Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+}
+html[data-theme="light"]{
+  --bg:#f3f4f7; --panel:#ffffff; --panel-2:#f8f9fb; --border:#d5d9e2;
+  --ink:#23262d; --dim:#6b7180; --faint:#9095a3;
+  --accent:#1c6f8c; --green:#24795e; --red:#b5432f; --req:#275e8f;
+  --pos:#1a5f9e; --neg:#c02617;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--sans); line-height:1.9;
+  padding:0 0 70px;
+  -webkit-tap-highlight-color:transparent;
+}
+.wrap{max-width:820px;margin:0 auto;padding:0 18px;
+  padding-left:calc(18px + env(safe-area-inset-left));
+  padding-right:calc(18px + env(safe-area-inset-right));}
+header{padding:28px 0 6px;position:relative;}
+h1{font-family:var(--serif);font-size:1.35rem;font-weight:700;margin:0;letter-spacing:.02em;line-height:1.6;}
+.sub{font-size:.78rem;color:var(--dim);margin-top:8px;}
+.themebtn{
+  position:absolute;top:28px;right:0;
+  background:none;border:1px solid var(--border);color:var(--dim);
+  border-radius:4px;padding:6px 11px;font-size:.72rem;font-family:var(--sans);cursor:pointer;
+}
+.themebtn:hover{color:var(--ink);border-color:var(--accent);}
+@media (max-width:520px){
+  header{padding-top:54px;}
+  .themebtn{top:16px;}
+}
+
+/* 結論ボックス */
+.lead{
+  margin-top:22px;border:1px solid var(--accent);border-radius:6px;
+  background:var(--panel);padding:16px 18px;
+}
+.lead h2{font-family:var(--serif);font-size:1rem;margin:0 0 8px;color:var(--accent);letter-spacing:.03em;}
+.lead p{margin:0 0 6px;font-size:.86rem;}
+.lead .big{font-size:.95rem;font-weight:700;}
+.lead b{color:var(--accent);}
+
+h2.sec{
+  font-family:var(--serif);font-size:1.05rem;font-weight:700;
+  margin:38px 0 4px;padding-bottom:8px;border-bottom:1px solid var(--border);
+  letter-spacing:.03em;
+}
+h2.sec .num{color:var(--accent);font-size:.8rem;margin-right:8px;letter-spacing:.08em;}
+h3{font-size:.92rem;margin:22px 0 6px;color:var(--ink);font-weight:700;}
+p{font-size:.86rem;margin:8px 0;}
+.note{font-size:.78rem;color:var(--dim);}
+b.hl{color:var(--accent);}
+.neg{color:var(--neg);font-weight:700;}
+.pos{color:var(--pos);font-weight:700;}
+
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.8rem;}
+th,td{padding:7px 9px;border-bottom:1px solid var(--border);text-align:left;}
+th{color:var(--dim);font-weight:600;font-size:.76rem;}
+td.n{text-align:right;font-variant-numeric:tabular-nums;}
+tr.hit td{color:var(--accent);font-weight:700;}
+.scroll{overflow-x:auto;}
+
+.card{
+  border:1px solid var(--border);border-radius:6px;background:var(--panel);
+  padding:14px 16px;margin:14px 0;
+}
+.card h4{margin:0 0 6px;font-size:.88rem;color:var(--accent);font-family:var(--serif);letter-spacing:.02em;}
+.card p{margin:4px 0;font-size:.84rem;}
+
+/* フェーズ */
+.phase{
+  border-left:3px solid var(--req);
+  background:var(--panel);
+  padding:13px 16px;margin:12px 0;border-radius:0 6px 6px 0;
+}
+.phase.p2{border-left-color:var(--accent);}
+.phase.p3{border-left-color:var(--green);}
+.phase.p4{border-left-color:var(--red);}
+.phase .ttl{font-weight:700;font-size:.9rem;margin-bottom:2px;}
+.phase .day{font-size:.74rem;color:var(--faint);letter-spacing:.05em;}
+.phase p{margin:6px 0 0;font-size:.83rem;}
+
+ul,ol{margin:8px 0;padding-left:1.3em;font-size:.85rem;}
+li{margin:5px 0;}
+li b{color:var(--ink);}
+
+.check{list-style:none;padding-left:0;}
+.check li{position:relative;padding-left:1.6em;}
+.check li::before{content:"☐";position:absolute;left:0;color:var(--accent);}
+
+.tagline{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+.tag{
+  font-size:.72rem;padding:2px 10px;border-radius:11px;
+  border:1px solid var(--border);color:var(--dim);white-space:nowrap;
+}
+.tag.s{background:var(--req);border-color:var(--req);color:var(--bg);font-weight:700;}
+.tag.a{border-color:var(--req);color:var(--req);}
+.tag.m{border-color:var(--green);color:var(--green);}
+.tag.f{border-color:var(--accent);color:var(--accent);}
+
+.files{display:grid;gap:10px;margin:14px 0;}
+.file{
+  border:1px solid var(--border);border-radius:6px;background:var(--panel-2);
+  padding:12px 14px;
+}
+.file .nm{font-size:.83rem;font-weight:700;color:var(--accent);font-family:var(--sans);}
+.file p{margin:4px 0 0;font-size:.8rem;color:var(--dim);}
+footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--border);font-size:.74rem;color:var(--faint);}
+
+.back-link{
+  position:absolute; z-index:1000;
+  top:calc(6px + env(safe-area-inset-top)); left:calc(10px + env(safe-area-inset-left));
+  padding:4px 2px; font-size:.72rem; color:inherit; opacity:.65; text-decoration:none;
+  font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+}
+.back-link:hover{ opacity:1; text-decoration:underline; }
+</style>
+</head>
+<body>
+<a class="back-link" href="torihiki.html">← 企業法務（取引法務）2級 トップ</a>
+<div class="wrap">
+
+<header>
+  <button class="themebtn" id="themeBtn">ライト表示</button>
+  <h1>企業法務（取引法務） 2級 ｜ 効率的な勉強法</h1>
+  <div class="sub">令和元年度〜令和7年度・520問を全文照合して割り出した、令和8年度に向けた学習設計</div>
+</header>
+
+<div class="lead">
+  <h2>結論：やるべき順番は決まっています</h2>
+  <p class="big">① 必修160問（令和5・4年度）→ ② 重要80問（令和3年度）→ ③ 丸暗記可122問 → ④ 苦手だけ回す</p>
+  <p>ビジネス・キャリア検定は<b>3年前・4年前の問題がそのまま、あるいは選択肢を少し変えて再出題される</b>傾向があります。
+  520問を照合したところ、再出題の山は<b>3年後（101件）・4年後（43件）</b>で、直近1〜2年からの再出題（18件）は少数です。</p>
+  <p>したがって<b>令和8年度を受けるなら、令和5年度と令和4年度の問題が最優先</b>。再出題だけで合格ライン近くまで届く年がある区分です。必修を確実に仕上げることが最短ルートです。</p>
+</div>
+
+<h2 class="sec"><span class="num">01</span>データで見る出題の規則性</h2>
+<p>「その年度だけを覚えていたら、本番の40問のうち何問が既知だったか」を過去問で実際に検証した結果です。</p>
+<div class="scroll">
+<table>
+  <tr><th>覚える範囲</th><th>令和7年度</th><th>令和6年度</th><th>令和5年度</th><th>令和4年度</th></tr>
+  <tr><td>直近1〜2年だけ</td><td class="n">5%</td><td class="n">5%</td><td class="n">2%</td><td class="n">5%</td></tr>
+  <tr><td>3年前だけ</td><td class="n">34%</td><td class="n">35%</td><td class="n">35%</td><td class="n">40%</td></tr>
+  <tr class="hit"><td>3年前＋4年前（＝必修）</td><td class="n">52%</td><td class="n">60%</td><td class="n">52%</td><td class="n">—</td></tr>
+  <tr><td>＋5年前（＝重要）</td><td class="n">69%</td><td class="n">62%</td><td class="n">—</td><td class="n">—</td></tr>
+</table>
+</div>
+<p class="note">※「既知」＝問題文・選択肢が同一、または大部分が一致する類題が存在した問題。合格基準は40問中24問＝60%です。「—」は比較できる過去の年度がないもの。</p>
+<p><b class="hl">読み方</b>：必修（3年前＋4年前）で52〜60%、重要（5年前）まで広げると69%（令和7年度）・62%（令和6年度）です。</p>
+
+<h2 class="sec"><span class="num">02</span>4つのフラグの意味</h2>
+<div class="tagline">
+  <span class="tag s">必修</span><span class="tag a">重要</span><span class="tag m">丸暗記可</span><span class="tag f">頻出 3回</span>
+</div>
+<div class="phase">
+  <div class="ttl">必修（160問）</div>
+  <div class="day">令和5年度・令和4年度</div>
+  <p>受験年から見て3年前・4年前。再出題が集中する層で、最優先で潰します。</p>
+</div>
+<div class="phase p2">
+  <div class="ttl">重要（80問）</div>
+  <div class="day">令和3年度</div>
+  <p>5年前。必修の次に再出題が多い「保険層」です。</p>
+</div>
+<div class="phase p3">
+  <div class="ttl">丸暗記可（122問）</div>
+  <div class="day">全年度から抽出</div>
+  <p><b>5肢すべてが同一のまま再出題された実績</b>がある問題。答えを覚えれば確実に得点できます。直前期の得点源。</p>
+</div>
+<div class="phase p4">
+  <div class="ttl">頻出（3回以上出題）</div>
+  <div class="day">7年間での出題回数</div>
+  <p>「この論点は試験の主題」というサイン。令和5〜7年度に再出題された割合は、過去2回以上出た問題9%・1回だけの問題15%でした。テキストで周辺知識ごと固める合図に使ってください。</p>
+</div>
+
+<h2 class="sec"><span class="num">03</span>学習プラン（標準6週間）</h2>
+<p>1日20問ペースを標準とします。1問あたり解答30秒＋確認1分で、<b>1日30〜40分</b>が目安です。</p>
+<div class="scroll">
+<table>
+  <tr><th>週</th><th>やること</th><th>分量</th><th>ゴール</th></tr>
+  <tr><td>第1〜2週</td><td>必修160問を1周（令和5年度→令和4年度）</td><td class="n">1日20問</td><td>×印を付けながら通す</td></tr>
+  <tr><td>第3週</td><td>必修の2周目＝間違えた問題のみ</td><td class="n">1日30問</td><td>正答率8割</td></tr>
+  <tr><td>第4週</td><td>重要80問を1周＋上位分野をテキストで確認</td><td class="n">1日20問</td><td>×を洗い出す</td></tr>
+  <tr><td>第5週</td><td>丸暗記可122問＋頻出論点の確認</td><td class="n">1日25問</td><td>答えを即答できる</td></tr>
+  <tr><td>第6週</td><td>苦手問題のみ／令和8年度予想120問で仕上げ</td><td class="n">1日40問</td><td>本番形式で6割超</td></tr>
+</table>
+</div>
+<p class="note">※時間が取れない場合は、第1〜3週（必修）と第5週（丸暗記可）だけでも実施してください。この2つが得点効率の高い部分です。</p>
+
+<h2 class="sec"><span class="num">04</span>解き方のコツ（出題形式の統計）</h2>
+<div class="card">
+  <h4>「誤り・不適切なものを選べ」が全体の約5割</h4>
+  <p>520問の内訳は <span class="neg">誤り・不適切を選べ＝242問（47%）</span>／<span class="pos">正しい・適切を選べ＝193問（37%）</span>／組合せ77問／個数0問／その他8問。</p>
+  <p><b>設問の最後をまず読み、「誤り・不適切」か「正しい・適切」かに印を付けてから選択肢に入る</b>だけで取りこぼしが減ります。アプリ・正解一覧では、この判定語を色分けして表示しています。</p>
+</div>
+<div class="card">
+  <h4>誤り選択肢は「作り方」が決まっている</h4>
+  <p>過去問を通すと、誤りの型は次のパターンにほぼ集約されます。</p>
+  <ul>
+    <li><b>担保の基本ルール</b>：根抵当権の元本確定期日は任意で変更可、法定地上権は設定時の建物と同一所有者が要件、集合物譲渡担保は後の搬入物にも及ぶ、動産譲渡登記は譲渡人が法人</li>
+    <li><b>手続の要件</b>：保全は疎明、支払督促は公示送達不可・執行文不要、即決和解の手数料は一律、担保権の実行に債務名義は不要、保全異議は発令裁判所にいつでも</li>
+    <li><b>相殺・債権譲渡</b>：自働債権の弁済期到来が必要、差押え後取得の債権は不可、譲受人の代位通知は無効、優劣は確定日付の到達・登記の先後</li>
+    <li><b>倒産</b>：破産・民事再生では担保権は別除権、会社更生では手続に拘束、私的整理には否認や拘束力がない</li>
+    <li><b>国際取引</b>：FOB・CIFの費用と危険、仲裁は上訴不可・非公開・NY条約で執行容易、機関仲裁とアドホック仲裁、陪審は一方の請求で行われる</li>
+  </ul>
+</div>
+<div class="card">
+  <h4>正解記号の偏り（参考）</h4>
+  <p>ア75／イ113／ウ112／エ109／オ111。<b>イがやや多く、アが最少</b>です。まったく分からない問題で当てずっぽうを選ぶ場合の最後の判断材料程度に。</p>
+</div>
+
+<h2 class="sec"><span class="num">05</span>分野別の重み（1回40問あたりの目安）</h2>
+<p>520問を設問の主題で自動分類した内訳です（分類できなかった問題7問を除く）。時間配分の目安に使ってください。</p>
+<div class="scroll">
+<table>
+  <tr><th>分野</th><th>7年計</th><th>構成比</th><th>1回あたり</th></tr>
+  <tr class="hit"><td>取引契約・独禁法</td><td class="n">171問</td><td class="n">32.9%</td><td class="n">約13.2問</td></tr>
+  <tr class="hit"><td>国際取引</td><td class="n">74問</td><td class="n">14.2%</td><td class="n">約5.7問</td></tr>
+  <tr class="hit"><td>担保・保証</td><td class="n">65問</td><td class="n">12.5%</td><td class="n">約5.0問</td></tr>
+  <tr><td>強制執行・民事保全</td><td class="n">64問</td><td class="n">12.3%</td><td class="n">約4.9問</td></tr>
+  <tr><td>債権回収</td><td class="n">63問</td><td class="n">12.1%</td><td class="n">約4.8問</td></tr>
+  <tr><td>倒産処理</td><td class="n">40問</td><td class="n">7.7%</td><td class="n">約3.1問</td></tr>
+  <tr><td>民事訴訟</td><td class="n">36問</td><td class="n">6.9%</td><td class="n">約2.8問</td></tr>
+</table>
+</div>
+<p><b class="hl">上位3分野（取引契約・独禁法・国際取引・担保・保証）で全体の60%</b>を占めます。企業法務（取引法務）2級は、取引契約（販売代理店・ライセンス・リース・業務委託など）と独禁法、担保・保証、債権回収、強制執行・民事保全、倒産処理、民事訴訟、国際取引まで、契約実務と紛争解決が中心です。同じ問題がほぼそのまま繰り返し出題される傾向が非常に強い区分です。</p>
+
+<h2 class="sec"><span class="num">06</span>教材の使い分け</h2>
+<div class="files">
+  <div class="file">
+    <div class="nm">一問一答アプリ</div>
+    <p>メインの学習ツール。年度・期で絞り、必修→重要の順に解きます。間違えた問題は自動で「苦手問題」に記録されるので、2周目は苦手モードだけを回してください。解答後に総括解説と選択肢ごとの解説（「より詳しい解説」）、下線の付いた用語の解説を読めます。</p>
+  </div>
+  <div class="file">
+    <div class="nm">正解一覧</div>
+    <p>「問題文 → 選ぶべき選択肢」だけを並べた確認用。通勤中の流し読みや、直前の総復習向き。丸暗記可フィルタで122問だけを一覧できます。検索窓に用語を入れると、その論点の問題を横断で確認できます。</p>
+  </div>
+  <div class="file">
+    <div class="nm">問題指定</div>
+    <p>年度・前期／後期・問題番号を指定して1問を解く画面。テキストや講義で出てきた過去問をピンポイントで確認したいときに。</p>
+  </div>
+  <div class="file">
+    <div class="nm">令和8年度 予想モード（アプリ内）</div>
+    <p>3年前・4年前の出題傾向から抽出した120問。直前1週間の総仕上げに、本番と同じ40問区切りで解いてください。</p>
+  </div>
+</div>
+
+<h2 class="sec"><span class="num">07</span>1日の進め方（テンプレート）</h2>
+<ol>
+  <li><b>解く（10分）</b>：20問を年度順に。迷った問題は選択肢を絞った理由を頭の中で言語化する。</li>
+  <li><b>確認する（15分）</b>：間違えた問題は解説を読み、テキストで該当論点を確認する。<b>他の4肢がなぜ正しい（誤り）のか</b>まで確認するのがポイント（他の年度でその肢が正解肢になることがあるため）。</li>
+  <li><b>広げる（5分）</b>：正解一覧の検索窓にその論点の用語を入れ、同じ論点の過去問を横断で見る。</li>
+  <li><b>記録する（1分）</b>：その日に3回以上出てきた論点をメモ1行。翌日の最初に見返す。</li>
+</ol>
+
+<h2 class="sec"><span class="num">08</span>直前1週間チェックリスト</h2>
+<ul class="check">
+  <li>令和8年度 予想モード120問を、40問ずつ区切って通した</li>
+  <li>丸暗記可122問を答えごと即答できる</li>
+  <li>苦手問題リストが20問以下になっている</li>
+    <li>販売代理店・フランチャイズ・ライセンスの独禁法上の問題（再販、競争品取扱い制限、改良技術、非係争義務）を整理した</li>
+    <li>根抵当権・法定地上権・譲渡担保・保証（個人根保証の要件）の要点を表にまとめた</li>
+    <li>債務名義の種類、強制執行の方法、民事保全と不服申立ての手続を区別できる</li>
+    <li>国際取引の一般条項・インコタームズ・仲裁と裁判の違いを英文条項とあわせて確認した</li>
+  <li>「誤り・不適切を選べ」が約5割であることを意識して、設問末尾を先に読む練習をした</li>
+</ul>
+
+<footer>
+  数値はいずれも、令和元年度〜令和7年度の公開問題（520問）を全文照合して算出したものです。
+  再出題の判定・分野の分類は、問題文と選択肢の一致度やキーワードによる自動判定のため、若干の誤差を含みます。
+</footer>
+
+</div>
+<script>
+const TK="torihiki_theme";
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme",t);
+  document.getElementById("themeBtn").textContent = (t==="light") ? "ダーク表示" : "ライト表示";
+  document.querySelector('meta[name="theme-color"]').setAttribute("content", t==="light" ? "#f3f4f7" : "#1b1d23");
+}
+let theme="dark";
+try{ theme = localStorage.getItem(TK) || "dark"; }catch(e){}
+applyTheme(theme);
+document.getElementById("themeBtn").onclick=()=>{
+  theme = (theme==="light") ? "dark" : "light";
+  applyTheme(theme);
+  try{ localStorage.setItem(TK,theme); }catch(e){}
+};
+</script>
+</body>
+</html>
